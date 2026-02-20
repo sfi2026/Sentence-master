@@ -19,10 +19,10 @@ body {
     background: linear-gradient(135deg, #FFD700, #FFA500);
     min-height: 100vh;
     display: flex;
-    align-items: flex-start; /* Changed from center to allow scrolling */
+    align-items: center;
     justify-content: center;
-    padding: 20px 20px 20px 0; /* Added padding */
-    overflow-y: auto; /* Allow body to scroll */
+    padding: 20px 20px 20px 0;
+    overflow: auto; /* Allow body to scroll */
 }
 
 /* ================= TIMER BAR (TOP TO BOTTOM) ================= */
@@ -38,34 +38,36 @@ body {
 
 .timer-bar {
     width: 100%;
-    height: 0%; /* Start from 0% */
-    background: #00FF00; /* Green color matching round3.html */
+    height: 0%;
+    background: #00FF00;
     position: absolute;
-    top: 0; /* Anchor to top */
+    top: 0;
     left: 0;
     animation: countdown 600s linear forwards;
 }
 
 @keyframes countdown {
-    from { height: 0%; }    /* Start at top */
-    to { height: 100%; }     /* Grow to bottom */
+    from { height: 0%; }
+    to { height: 100%; }
 }
 
 /* ================= MAIN CARD ================= */
 .question-container {
     background: white;
     border-radius: 20px;
-    padding: 40px;
+    padding: 30px;
     max-width: 1000px;
-    width: 90%;
+    width: 95%;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     text-align: center;
-    margin: 20px auto; /* Centered with margin */
-    max-height: 95vh; /* Limit height */
-    overflow-y: auto; /* Add scroll inside container if needed */
+    margin: 20px auto;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Add custom scrollbar styling */
+/* Custom scrollbar */
 .question-container::-webkit-scrollbar {
     width: 10px;
 }
@@ -80,42 +82,42 @@ body {
     border-radius: 10px;
 }
 
-.question-container::-webkit-scrollbar-thumb:hover {
-    background: #EE5A6F;
-}
-
 .stage-title {
     font-family: 'Fredoka One', cursive;
     font-size: 42px;
     color: #FF6B6B;
     margin-bottom: 10px;
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
 .stage-subtitle {
     font-size: 20px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .question-number {
     font-family: 'Fredoka One', cursive;
     font-size: 26px;
     color: #4ECDC4;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    flex-shrink: 0;
 }
 
 .question-box {
     background: linear-gradient(135deg, #667eea, #764ba2);
     border-radius: 15px;
-    padding: 30px;
+    padding: 25px;
     color: white;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .original-sentence {
     font-size: 26px;
-    margin-bottom: 20px;
-    line-height: 1.5;
-    word-wrap: break-word; /* Handle long words */
+    margin-bottom: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
 }
 
 .change-instruction {
@@ -129,11 +131,12 @@ body {
 .answer-section {
     background: #f8f9fa;
     border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 25px;
+    padding: 20px;
+    margin-bottom: 20px;
     display: none;
-    max-height: 400px; /* Limit height */
-    overflow-y: auto; /* Add scroll for long answers */
+    max-height: 300px;
+    overflow-y: auto;
+    flex-shrink: 0;
 }
 
 .answer-section::-webkit-scrollbar {
@@ -154,12 +157,7 @@ body {
     font-family: 'Fredoka One', cursive;
     font-size: 22px;
     color: #4ECDC4;
-    margin-bottom: 15px;
-    position: sticky; /* Make label sticky */
-    top: 0;
-    background: #f8f9fa;
-    padding: 10px 0;
-    z-index: 10;
+    margin-bottom: 10px;
 }
 
 .answer-text {
@@ -170,7 +168,6 @@ body {
     border-radius: 10px;
     border: 3px solid #4ECDC4;
     word-wrap: break-word;
-    white-space: pre-wrap; /* Preserve formatting */
 }
 
 /* ================= CONTROLS ================= */
@@ -179,10 +176,13 @@ body {
     gap: 15px;
     justify-content: center;
     flex-wrap: wrap;
-    position: sticky; /* Make controls sticky */
-    bottom: 0;
+    margin-top: 10px;
+    padding: 15px 0 5px 0;
     background: white;
-    padding: 20px 0 0 0;
+    border-top: 2px solid #f0f0f0;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
     z-index: 10;
 }
 
@@ -197,6 +197,7 @@ body {
     text-transform: uppercase;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     transition: all 0.3s ease;
+    min-width: 160px; /* Ensure buttons have minimum width */
 }
 
 .control-btn:hover {
@@ -210,14 +211,45 @@ body {
 
 .hidden { display: none !important; }
 
-@media (max-width: 768px) {
+/* Tablet specific styles */
+@media (max-width: 1024px) and (min-width: 768px) {
+    .question-container {
+        padding: 25px;
+        max-height: 85vh;
+    }
+    
+    .stage-title {
+        font-size: 38px;
+    }
+    
+    .original-sentence {
+        font-size: 24px;
+    }
+    
+    .control-btn {
+        font-size: 18px;
+        padding: 12px 25px;
+        min-width: 140px;
+    }
+    
+    .answer-section {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 767px) {
     body {
         padding: 10px 10px 10px 0;
+        align-items: flex-start;
     }
     
     .question-container {
         padding: 20px;
-        max-height: 98vh;
+        max-height: none; /* Remove height limit on mobile */
+    }
+    
+    .stage-title {
+        font-size: 32px;
     }
     
     .original-sentence { 
@@ -226,16 +258,36 @@ body {
     
     .controls { 
         flex-direction: column; 
-        padding: 15px 0 0 0;
+        align-items: center;
+        position: static; /* Remove sticky on mobile */
     }
     
     .control-btn { 
-        width: 100%; 
+        width: 100%;
+        min-width: auto;
     }
     
     .answer-section {
-        max-height: 300px;
+        max-height: 200px;
     }
+}
+
+/* Ensure buttons are always visible */
+.controls {
+    display: flex;
+    visibility: visible;
+    opacity: 1;
+}
+
+.control-btn {
+    display: inline-block;
+    visibility: visible;
+    opacity: 1;
+}
+
+/* When hidden class is applied, override */
+.control-btn.hidden {
+    display: none !important;
 }
 </style>
 </head>
@@ -338,9 +390,9 @@ function showQuestion() {
 
 $('#showAnswerBtn').on('click', function () {
     $('#answerSection').slideDown(300, function() {
-        // After answer is shown, scroll to it smoothly
+        // After answer is shown, scroll to make sure buttons are visible
         $('.question-container').animate({
-            scrollTop: $('#answerSection').offset().top - $('.question-container').offset().top + $('.question-container').scrollTop()
+            scrollTop: $('.question-container')[0].scrollHeight
         }, 500);
     });
     $(this).addClass('hidden');
@@ -355,6 +407,13 @@ $('#nextBtn').on('click', function () {
 // Clear timeout when leaving page
 window.addEventListener('beforeunload', function() {
     clearTimeout(timerTimeout);
+});
+
+// Force buttons to be visible (debugging)
+console.log('Buttons initialized:', {
+    showBtn: $('#showAnswerBtn').length,
+    nextBtn: $('#nextBtn').length,
+    homeBtn: $('.btn-home').length
 });
 </script>
 
