@@ -19,9 +19,10 @@ body {
     background: linear-gradient(135deg, #FFD700, #FFA500);
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Changed from center to allow scrolling */
     justify-content: center;
-    overflow: hidden;
+    padding: 20px 20px 20px 0; /* Added padding */
+    overflow-y: auto; /* Allow body to scroll */
 }
 
 /* ================= TIMER BAR (TOP TO BOTTOM) ================= */
@@ -59,6 +60,28 @@ body {
     width: 90%;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     text-align: center;
+    margin: 20px auto; /* Centered with margin */
+    max-height: 95vh; /* Limit height */
+    overflow-y: auto; /* Add scroll inside container if needed */
+}
+
+/* Add custom scrollbar styling */
+.question-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.question-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.question-container::-webkit-scrollbar-thumb {
+    background: #FF6B6B;
+    border-radius: 10px;
+}
+
+.question-container::-webkit-scrollbar-thumb:hover {
+    background: #EE5A6F;
 }
 
 .stage-title {
@@ -92,12 +115,14 @@ body {
     font-size: 26px;
     margin-bottom: 20px;
     line-height: 1.5;
+    word-wrap: break-word; /* Handle long words */
 }
 
 .change-instruction {
     font-family: 'Fredoka One', cursive;
     font-size: 20px;
     color: #FFD700;
+    word-wrap: break-word;
 }
 
 /* ================= ANSWER ================= */
@@ -107,6 +132,22 @@ body {
     padding: 25px;
     margin-bottom: 25px;
     display: none;
+    max-height: 400px; /* Limit height */
+    overflow-y: auto; /* Add scroll for long answers */
+}
+
+.answer-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.answer-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.answer-section::-webkit-scrollbar-thumb {
+    background: #4ECDC4;
+    border-radius: 10px;
 }
 
 .answer-label {
@@ -114,6 +155,11 @@ body {
     font-size: 22px;
     color: #4ECDC4;
     margin-bottom: 15px;
+    position: sticky; /* Make label sticky */
+    top: 0;
+    background: #f8f9fa;
+    padding: 10px 0;
+    z-index: 10;
 }
 
 .answer-text {
@@ -123,6 +169,8 @@ body {
     background: white;
     border-radius: 10px;
     border: 3px solid #4ECDC4;
+    word-wrap: break-word;
+    white-space: pre-wrap; /* Preserve formatting */
 }
 
 /* ================= CONTROLS ================= */
@@ -131,6 +179,11 @@ body {
     gap: 15px;
     justify-content: center;
     flex-wrap: wrap;
+    position: sticky; /* Make controls sticky */
+    bottom: 0;
+    background: white;
+    padding: 20px 0 0 0;
+    z-index: 10;
 }
 
 .control-btn {
@@ -158,9 +211,31 @@ body {
 .hidden { display: none !important; }
 
 @media (max-width: 768px) {
-    .original-sentence { font-size: 22px; }
-    .controls { flex-direction: column; }
-    .control-btn { width: 100%; }
+    body {
+        padding: 10px 10px 10px 0;
+    }
+    
+    .question-container {
+        padding: 20px;
+        max-height: 98vh;
+    }
+    
+    .original-sentence { 
+        font-size: 22px; 
+    }
+    
+    .controls { 
+        flex-direction: column; 
+        padding: 15px 0 0 0;
+    }
+    
+    .control-btn { 
+        width: 100%; 
+    }
+    
+    .answer-section {
+        max-height: 300px;
+    }
 }
 </style>
 </head>
@@ -202,7 +277,10 @@ let currentIndex = 0;
 let timerTimeout;
 
 $(document).ready(function () {
-    fetch('questions.csv')
+    // Get the selected CSV file from localStorage
+    const selectedCsvFile = localStorage.getItem('sentenceMasterCSV') || 'questions_easy.csv';
+    
+    fetch(selectedCsvFile)
         .then(res => res.text())
         .then(csv => {
             parseCSV(csv);
@@ -214,7 +292,7 @@ $(document).ready(function () {
                 location.href = 'winner.html';
             }, 600000);
         })
-        .catch(() => alert('Cannot load questions.csv'));
+        .catch(() => alert('Cannot load ' + selectedCsvFile));
 });
 
 function parseCSV(csv) {
@@ -232,7 +310,7 @@ function parseCSV(csv) {
         }
     }
 
-    // ✅ RANDOMIZE QUESTIONS
+    // RANDOMIZE QUESTIONS
     questions.sort(() => Math.random() - 0.5);
 }
 
@@ -253,10 +331,18 @@ function showQuestion() {
     $('#answerSection').hide();
     $('#showAnswerBtn').removeClass('hidden');
     $('#nextBtn').addClass('hidden');
+    
+    // Scroll to top of question container
+    $('.question-container').scrollTop(0);
 }
 
 $('#showAnswerBtn').on('click', function () {
-    $('#answerSection').slideDown();
+    $('#answerSection').slideDown(300, function() {
+        // After answer is shown, scroll to it smoothly
+        $('.question-container').animate({
+            scrollTop: $('#answerSection').offset().top - $('.question-container').offset().top + $('.question-container').scrollTop()
+        }, 500);
+    });
     $(this).addClass('hidden');
     $('#nextBtn').removeClass('hidden');
 });
