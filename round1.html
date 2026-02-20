@@ -417,38 +417,76 @@ $(document).ready(function () {
     const selectedCsvFile = localStorage.getItem('sentenceMasterCSV') || 'questions_easy.csv';
     
     fetch(selectedCsvFile)
-        .then(res => res.text())
-        .then(csv => {
-            parseCSV(csv);
-            showQuestion();
-            
-            // Set timer for 10 minutes (600000 ms)
-            timerTimeout = setTimeout(function() {
-                showTimesUpModal();
-            }, 600000);
-            
-            // Listen for animation end on timer bar
-            $('.timer-bar').on('animationend', function() {
-                showTimesUpModal();
-            });
-        })
-        .catch(() => alert('Cannot load ' + selectedCsvFile));
+    .then(res => {
+        if (!res.ok) {
+            throw new Error(`Could not load ${selectedCsvFile}`);
+        }
+        return res.text();
+    })
+    .then(csv => {
+        console.log('CSV loaded, length:', csv.length);
+        parseCSV(csv);
+        
+        if (questions.length === 0) {
+            alert('No valid questions found in the CSV file. Please check the file format.');
+            return;
+        }
+        
+        showQuestion();
+        
+        // Set timer for 10 minutes (600000 ms)
+        timerTimeout = setTimeout(function() {
+            showTimesUpModal();
+        }, 600000);
+        
+        // Listen for animation end on timer bar
+        $('.timer-bar').on('animationend', function() {
+            showTimesUpModal();
+        });
+    })
+    .catch(error => {
+        alert('Error loading CSV: ' + error.message);
+        console.error('Fetch error:', error);
+    });
 });
 
 function parseCSV(csv) {
     const lines = csv.split('\n');
     questions = [];
 
+    // Check if the file uses tabs or commas
+    const firstLine = lines[1] || '';
+    const delimiter = firstLine.includes('\t') ? '\t' : ',';
+    
+    console.log('Using delimiter:', delimiter); // For debugging
+
     for (let i = 1; i < lines.length; i++) {
-        const parts = lines[i].split(',');
+        if (lines[i].trim() === '') continue; // Skip empty lines
+        
+        let parts;
+        if (delimiter === '\t') {
+            parts = lines[i].split('\t');
+        } else {
+            parts = lines[i].split(',');
+        }
+        
         if (parts.length >= 4) {
             questions.push({
-                original: parts[1].trim(),
-                changeTo: parts[2].trim(),
-                answer: parts[3].trim()
+                original: parts[1]?.trim() || '',
+                changeTo: parts[2]?.trim() || '',
+                answer: parts[3]?.trim() || ''
             });
         }
     }
+
+    console.log('Questions loaded:', questions.length); // For debugging
+    
+    // Filter out any empty questions
+    questions = questions.filter(q => q.original && q.changeTo && q.answer);
+    
+    // RANDOMIZE QUESTIONS
+    questions.sort(() => Math.random() - 0.5);
+}
 
     // RANDOMIZE QUESTIONS
     questions.sort(() => Math.random() - 0.5);
