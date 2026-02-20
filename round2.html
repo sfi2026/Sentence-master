@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Round 2: Challenge</title>
+<title>Round 2: Survivor Battle</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,11 +16,11 @@
 
 body {
     font-family: 'Bubblegum Sans', cursive;
-    background: linear-gradient(135deg, #4ECDC4, #44A08D);
+    background: linear-gradient(135deg, #FF6B6B, #EE5A6F);
     min-height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     padding: 20px 20px 20px 0;
     overflow: auto;
 }
@@ -63,6 +63,8 @@ body {
     margin: 20px auto;
     max-height: 90vh;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .card::-webkit-scrollbar {
@@ -75,22 +77,31 @@ body {
 }
 
 .card::-webkit-scrollbar-thumb {
-    background: #44A08D;
+    background: #FF6B6B;
     border-radius: 10px;
 }
 
 .round-title {
     font-family: 'Fredoka One', cursive;
     font-size: 42px;
-    color: #44A08D;
+    color: #FF6B6B;
     margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.stage-subtitle {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #666;
+    flex-shrink: 0;
 }
 
 .question-number {
     font-family: 'Fredoka One', cursive;
     font-size: 26px;
-    color: #FF6B6B;
-    margin-bottom: 25px;
+    color: #4ECDC4;
+    margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .question-box {
@@ -98,39 +109,87 @@ body {
     border-radius: 15px;
     padding: 30px;
     color: white;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+    flex-shrink: 0;
 }
 
-.original {
+.original-sentence {
     font-size: 26px;
     margin-bottom: 20px;
     word-wrap: break-word;
+    line-height: 1.4;
 }
 
-.instruction {
+.change-instruction {
     font-family: 'Fredoka One', cursive;
     font-size: 22px;
     color: #FFD700;
     word-wrap: break-word;
 }
 
+/* ===== ANSWER SECTION ===== */
+.answer-section {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.answer-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.answer-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.answer-section::-webkit-scrollbar-thumb {
+    background: #FF6B6B;
+    border-radius: 10px;
+}
+
+.answer-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    color: #FF6B6B;
+    margin-bottom: 15px;
+}
+
+.answer-text {
+    font-size: 24px;
+    color: #2c3e50;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    border: 3px solid #FF6B6B;
+    word-wrap: break-word;
+}
+
 /* ===== CONTROLS ===== */
 .controls {
     display: flex;
+    gap: 15px;
     justify-content: center;
-    gap: 20px;
     flex-wrap: wrap;
+    margin-top: 10px;
+    padding: 15px 0 5px 0;
+    background: white;
+    border-top: 2px solid #f0f0f0;
+    flex-shrink: 0;
     position: sticky;
     bottom: 0;
-    background: white;
-    padding: 20px 0 0 0;
-    border-top: 2px solid #f0f0f0;
+    z-index: 10;
 }
 
-.btn {
+.control-btn {
     font-family: 'Fredoka One', cursive;
     font-size: 22px;
-    padding: 18px 45px;
+    padding: 15px 40px;
     border: none;
     border-radius: 15px;
     cursor: pointer;
@@ -141,9 +200,13 @@ body {
     min-width: 180px;
 }
 
-.btn:hover {
+.control-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.btn-show {
+    background: linear-gradient(145deg, #4ECDC4, #44A08D);
 }
 
 .btn-next {
@@ -154,45 +217,11 @@ body {
     background: linear-gradient(145deg, #FF6B6B, #EE5A6F);
 }
 
-/* ===== REVIEW ===== */
-.review {
-    display: none;
-    background: white;
-    padding: 40px;
-    max-width: 1200px;
-    width: calc(100% - 40px);
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    max-height: 90vh;
-    overflow-y: auto;
-    margin: 20px auto;
+.btn-home {
+    background: linear-gradient(145deg, #95a5a6, #7f8c8d);
 }
 
-.review h2 {
-    font-family: 'Fredoka One', cursive;
-    font-size: 40px;
-    color: #FF6B6B;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.review-item {
-    margin-bottom: 35px;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 15px;
-}
-
-.review-item p {
-    font-size: 26px;
-    margin-bottom: 6px;
-    word-wrap: break-word;
-}
-
-.answer {
-    font-weight: bold;
-    color: #44A08D;
-}
+.hidden { display: none !important; }
 
 /* ===== MODAL POPUP ===== */
 .modal-overlay {
@@ -279,11 +308,11 @@ body {
         position: static;
     }
     
-    .btn {
+    .control-btn {
         width: 100%;
         min-width: auto;
         font-size: 20px;
-        padding: 15px 30px;
+        padding: 15px 25px;
     }
     
     .modal-content {
@@ -310,24 +339,27 @@ body {
 
 <!-- GAME VIEW -->
 <div class="card" id="gameView">
-    <div class="round-title">Round 2: Challenge</div>
+    <div class="round-title">⚔️ Survivor Battle</div>
+    <div class="stage-subtitle">Last one standing wins!</div>
+    
     <div class="question-number" id="questionNumber"></div>
 
     <div class="question-box">
-        <div class="original" id="originalSentence"></div>
-        <div class="instruction" id="instruction"></div>
+        <div class="original-sentence" id="originalSentence"></div>
+        <div class="change-instruction" id="instruction"></div>
+    </div>
+
+    <div class="answer-section" id="answerSection">
+        <div class="answer-label">✓ Correct Answer</div>
+        <div class="answer-text" id="answerText"></div>
     </div>
 
     <div class="controls">
-        <button class="btn btn-next" id="nextBtn">Next</button>
-        <button class="btn btn-end" id="endBtn">End</button>
+        <button class="control-btn btn-show" id="showAnswerBtn">Show Answer</button>
+        <button class="control-btn btn-next hidden" id="nextBtn">Next</button>
+        <button class="control-btn btn-end" id="endBtn">End Game</button>
+        <button class="control-btn btn-home" onclick="location.href='index.html'">Home</button>
     </div>
-</div>
-
-<!-- REVIEW VIEW -->
-<div class="review" id="reviewView">
-    <h2>Answer Review</h2>
-    <div id="reviewList"></div>
 </div>
 
 <!-- TIME'S UP MODAL -->
@@ -344,27 +376,69 @@ body {
 let questions = [];
 let index = 0;
 let timerTimeout;
-let timerAnimationEnd;
 
-/* LOAD QUESTIONS */
 $(document).ready(function() {
-    const selectedCsvFile = localStorage.getItem('sentenceMasterCSV') || 'questions_easy.csv';
+    // Get the selected CSV file from localStorage
+    const selectedCsvFile = localStorage.getItem('sentenceMasterCSV');
+    
+    if (!selectedCsvFile) {
+        alert('No CSV file selected. Please go back and choose a level.');
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    console.log('Loading CSV file:', selectedCsvFile);
     
     fetch(selectedCsvFile)
-        .then(r => r.text())
+        .then(r => {
+            if (!r.ok) {
+                throw new Error(`Could not load ${selectedCsvFile}`);
+            }
+            return r.text();
+        })
         .then(csv => {
+            console.log('CSV loaded, length:', csv.length);
+            
             const lines = csv.split('\n');
+            
+            // Check if the file uses tabs or commas
+            const firstLine = lines[1] || '';
+            const delimiter = firstLine.includes('\t') ? '\t' : ',';
+            
+            console.log('Using delimiter:', delimiter);
+            
             for (let i = 1; i < lines.length; i++) {
-                const p = lines[i].split(',');
+                if (lines[i].trim() === '') continue;
+                
+                let p;
+                if (delimiter === '\t') {
+                    p = lines[i].split('\t');
+                } else {
+                    p = lines[i].split(',');
+                }
+                
                 if (p.length >= 4) {
                     questions.push({
-                        q: p[1].trim(),
-                        c: p[2].trim(),
-                        a: p[3].trim()
+                        original: p[1]?.trim() || '',
+                        changeTo: p[2]?.trim() || '',
+                        answer: p[3]?.trim() || ''
                     });
                 }
             }
+            
+            // Filter out any empty questions
+            questions = questions.filter(q => q.original && q.changeTo && q.answer);
+            
+            console.log('Questions loaded:', questions.length);
+            
+            if (questions.length === 0) {
+                alert('No valid questions found in the CSV file. Please check the file format.');
+                return;
+            }
+            
+            // Shuffle questions
             questions.sort(() => Math.random() - 0.5);
+            
             showQuestion();
             
             // Set timer for 10 minutes (600000 ms)
@@ -376,16 +450,63 @@ $(document).ready(function() {
             $('.timer-bar').on('animationend', function() {
                 showTimesUpModal();
             });
+        })
+        .catch(error => {
+            alert('Error loading CSV: ' + error.message);
+            console.error('Fetch error:', error);
         });
 });
 
 function showQuestion() {
-    if (index >= questions.length) index = 0;
+    if (index >= questions.length) {
+        // End of questions - go to winner page
+        clearTimeout(timerTimeout);
+        location.href = 'winner.html';
+        return;
+    }
+
     const q = questions[index];
-    $('#questionNumber').text(`Question ${index + 1}`);
-    $('#originalSentence').text(q.q);
-    $('#instruction').text(`→ Change to: ${q.c}`);
+    
+    $('#questionNumber').text(`Question ${index + 1} of ${questions.length}`);
+    $('#originalSentence').text(q.original);
+    $('#instruction').text(`→ Change to: ${q.changeTo}`);
+    $('#answerText').text(q.answer);
+
+    // Hide answer section and reset buttons
+    $('#answerSection').hide();
+    $('#showAnswerBtn').removeClass('hidden');
+    $('#nextBtn').addClass('hidden');
+    // End Game button is always visible
+    
+    // Scroll to top
+    $('.card').scrollTop(0);
 }
+
+$('#showAnswerBtn').on('click', function() {
+    $('#answerSection').slideDown(300, function() {
+        // After answer is shown, scroll to make sure buttons are visible
+        $('.card').animate({
+            scrollTop: $('.card')[0].scrollHeight
+        }, 500);
+    });
+    $(this).addClass('hidden');
+    $('#nextBtn').removeClass('hidden');
+    // End Game button remains visible
+});
+
+$('#nextBtn').on('click', function() {
+    index++;
+    showQuestion();
+});
+
+$('#endBtn').on('click', function() {
+    // Show confirmation dialog
+    if (confirm('Are you sure you want to end the game?')) {
+        clearTimeout(timerTimeout);
+        // Go directly to winner page
+        location.href = 'winner.html';
+    }
+});
 
 function showTimesUpModal() {
     // Clear the timeout to prevent multiple triggers
@@ -398,39 +519,10 @@ function showTimesUpModal() {
     $('.timer-bar').css('animation-play-state', 'paused');
 }
 
-$('#nextBtn').click(() => {
-    index++;
-    showQuestion();
-});
-
-$('#endBtn').click(showAnswers);
-
-function showAnswers() {
-    clearTimeout(timerTimeout);
-    $('#gameView').hide();
-    $('#reviewView').show();
-    $('#reviewList').empty();
-
-    questions.forEach((q, i) => {
-        $('#reviewList').append(`
-            <div class="review-item">
-                <p><strong>Question ${i + 1}</strong></p>
-                <p>${q.q}</p>
-                <p>→ ${q.c}</p>
-                <p class="answer">✔ ${q.a}</p>
-            </div>
-        `);
-    });
-}
-
 // Modal OK button click
 $('#modalOkBtn').on('click', function() {
-    // If we're in game view, show answers; if in review view, go to winner
-    if ($('#gameView').is(':visible')) {
-        showAnswers();
-    } else {
-        location.href = 'winner.html';
-    }
+    // Go to winner page
+    location.href = 'winner.html';
 });
 
 // Clear timeout when leaving page
