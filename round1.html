@@ -22,10 +22,10 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px 20px 20px 0;
-    overflow: auto; /* Allow body to scroll */
+    overflow: auto;
 }
 
-/* ================= TIMER BAR (TOP TO BOTTOM) ================= */
+/* ================= TIMER BAR ================= */
 .timer-container {
     position: fixed;
     right: 0;
@@ -87,7 +87,7 @@ body {
     font-size: 42px;
     color: #FF6B6B;
     margin-bottom: 10px;
-    flex-shrink: 0; /* Prevent shrinking */
+    flex-shrink: 0;
 }
 
 .stage-subtitle {
@@ -197,7 +197,7 @@ body {
     text-transform: uppercase;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     transition: all 0.3s ease;
-    min-width: 160px; /* Ensure buttons have minimum width */
+    min-width: 160px;
 }
 
 .control-btn:hover {
@@ -210,6 +210,85 @@ body {
 .btn-home { background: linear-gradient(145deg, #95a5a6, #7f8c8d); }
 
 .hidden { display: none !important; }
+
+/* ================= MODAL POPUP ================= */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    animation: modalPop 0.5s ease-out;
+}
+
+@keyframes modalPop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+.modal-content h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 48px;
+    color: #FF6B6B;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.modal-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 24px;
+    padding: 15px 50px;
+    background: linear-gradient(145deg, #FF6B6B, #EE5A6F);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.modal-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
 
 /* Tablet specific styles */
 @media (max-width: 1024px) and (min-width: 768px) {
@@ -232,8 +311,12 @@ body {
         min-width: 140px;
     }
     
-    .answer-section {
-        max-height: 250px;
+    .modal-content {
+        padding: 30px;
+    }
+    
+    .modal-content h2 {
+        font-size: 42px;
     }
 }
 
@@ -245,7 +328,7 @@ body {
     
     .question-container {
         padding: 20px;
-        max-height: none; /* Remove height limit on mobile */
+        max-height: none;
     }
     
     .stage-title {
@@ -259,7 +342,7 @@ body {
     .controls { 
         flex-direction: column; 
         align-items: center;
-        position: static; /* Remove sticky on mobile */
+        position: static;
     }
     
     .control-btn { 
@@ -267,27 +350,17 @@ body {
         min-width: auto;
     }
     
-    .answer-section {
-        max-height: 200px;
+    .modal-content {
+        padding: 25px;
     }
-}
-
-/* Ensure buttons are always visible */
-.controls {
-    display: flex;
-    visibility: visible;
-    opacity: 1;
-}
-
-.control-btn {
-    display: inline-block;
-    visibility: visible;
-    opacity: 1;
-}
-
-/* When hidden class is applied, override */
-.control-btn.hidden {
-    display: none !important;
+    
+    .modal-content h2 {
+        font-size: 36px;
+    }
+    
+    .modal-icon {
+        font-size: 60px;
+    }
 }
 </style>
 </head>
@@ -323,10 +396,21 @@ body {
     </div>
 </div>
 
+<!-- TIME'S UP MODAL -->
+<div class="modal-overlay" id="timesUpModal">
+    <div class="modal-content">
+        <div class="modal-icon">⏰</div>
+        <h2>TIME'S UP!</h2>
+        <p>The round has ended</p>
+        <button class="modal-btn" id="modalOkBtn">OK</button>
+    </div>
+</div>
+
 <script>
 let questions = [];
 let currentIndex = 0;
 let timerTimeout;
+let timerAnimationEnd;
 
 $(document).ready(function () {
     // Get the selected CSV file from localStorage
@@ -340,9 +424,13 @@ $(document).ready(function () {
             
             // Set timer for 10 minutes (600000 ms)
             timerTimeout = setTimeout(function() {
-                alert('⏰ Time Over!');
-                location.href = 'winner.html';
+                showTimesUpModal();
             }, 600000);
+            
+            // Listen for animation end on timer bar
+            $('.timer-bar').on('animationend', function() {
+                showTimesUpModal();
+            });
         })
         .catch(() => alert('Cannot load ' + selectedCsvFile));
 });
@@ -388,6 +476,17 @@ function showQuestion() {
     $('.question-container').scrollTop(0);
 }
 
+function showTimesUpModal() {
+    // Clear the timeout to prevent multiple triggers
+    clearTimeout(timerTimeout);
+    
+    // Show the modal
+    $('#timesUpModal').fadeIn(300).css('display', 'flex');
+    
+    // Pause the timer animation
+    $('.timer-bar').css('animation-play-state', 'paused');
+}
+
 $('#showAnswerBtn').on('click', function () {
     $('#answerSection').slideDown(300, function() {
         // After answer is shown, scroll to make sure buttons are visible
@@ -404,16 +503,15 @@ $('#nextBtn').on('click', function () {
     showQuestion();
 });
 
+// Modal OK button click
+$('#modalOkBtn').on('click', function() {
+    // Redirect to winner page
+    location.href = 'winner.html';
+});
+
 // Clear timeout when leaving page
 window.addEventListener('beforeunload', function() {
     clearTimeout(timerTimeout);
-});
-
-// Force buttons to be visible (debugging)
-console.log('Buttons initialized:', {
-    showBtn: $('#showAnswerBtn').length,
-    nextBtn: $('#nextBtn').length,
-    homeBtn: $('.btn-home').length
 });
 </script>
 
