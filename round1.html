@@ -410,44 +410,52 @@ body {
 let questions = [];
 let currentIndex = 0;
 let timerTimeout;
-let timerAnimationEnd;
 
 $(document).ready(function () {
     // Get the selected CSV file from localStorage
-    const selectedCsvFile = localStorage.getItem('sentenceMasterCSV') || 'questions_easy.csv';
+    const selectedCsvFile = localStorage.getItem('sentenceMasterCSV');
+    
+    if (!selectedCsvFile) {
+        alert('No CSV file selected. Please go back and choose a level.');
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    console.log('Loading CSV file:', selectedCsvFile);
     
     fetch(selectedCsvFile)
-    .then(res => {
-        if (!res.ok) {
-            throw new Error(`Could not load ${selectedCsvFile}`);
-        }
-        return res.text();
-    })
-    .then(csv => {
-        console.log('CSV loaded, length:', csv.length);
-        parseCSV(csv);
-        
-        if (questions.length === 0) {
-            alert('No valid questions found in the CSV file. Please check the file format.');
-            return;
-        }
-        
-        showQuestion();
-        
-        // Set timer for 10 minutes (600000 ms)
-        timerTimeout = setTimeout(function() {
-            showTimesUpModal();
-        }, 600000);
-        
-        // Listen for animation end on timer bar
-        $('.timer-bar').on('animationend', function() {
-            showTimesUpModal();
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`Could not load ${selectedCsvFile}`);
+            }
+            return res.text();
+        })
+        .then(csv => {
+            console.log('CSV loaded, length:', csv.length);
+            parseCSV(csv);
+            
+            if (questions.length === 0) {
+                alert('No valid questions found in the CSV file. Please check the file format.');
+                return;
+            }
+            
+            console.log('Questions loaded:', questions.length);
+            showQuestion();
+            
+            // Set timer for 10 minutes (600000 ms)
+            timerTimeout = setTimeout(function() {
+                showTimesUpModal();
+            }, 600000);
+            
+            // Listen for animation end on timer bar
+            $('.timer-bar').on('animationend', function() {
+                showTimesUpModal();
+            });
+        })
+        .catch(error => {
+            alert('Error loading CSV: ' + error.message);
+            console.error('Fetch error:', error);
         });
-    })
-    .catch(error => {
-        alert('Error loading CSV: ' + error.message);
-        console.error('Fetch error:', error);
-    });
 });
 
 function parseCSV(csv) {
@@ -458,7 +466,7 @@ function parseCSV(csv) {
     const firstLine = lines[1] || '';
     const delimiter = firstLine.includes('\t') ? '\t' : ',';
     
-    console.log('Using delimiter:', delimiter); // For debugging
+    console.log('Using delimiter:', delimiter);
 
     for (let i = 1; i < lines.length; i++) {
         if (lines[i].trim() === '') continue; // Skip empty lines
@@ -479,15 +487,9 @@ function parseCSV(csv) {
         }
     }
 
-    console.log('Questions loaded:', questions.length); // For debugging
-    
     // Filter out any empty questions
     questions = questions.filter(q => q.original && q.changeTo && q.answer);
     
-    // RANDOMIZE QUESTIONS
-    questions.sort(() => Math.random() - 0.5);
-}
-
     // RANDOMIZE QUESTIONS
     questions.sort(() => Math.random() - 0.5);
 }
@@ -501,7 +503,7 @@ function showQuestion() {
 
     const q = questions[currentIndex];
 
-    $('#questionNumber').text(`Question ${currentIndex + 1}`);
+    $('#questionNumber').text(`Question ${currentIndex + 1} of ${questions.length}`);
     $('#originalSentence').text(q.original);
     $('#changeInstruction').text(`→ Change to: ${q.changeTo}`);
     $('#answerText').text(q.answer);
