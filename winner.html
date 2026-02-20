@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Winner</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Bubblegum Sans', cursive;
+    overflow: hidden;
+}
+
+/* CENTER STACK */
+.winner-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* TRUE CENTER */
+    z-index: 2;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* LOGO */
+.winner-logo {
+    width: 900px;
+    max-width: 80vw;
+    display: relative;
+    margin-top: -60px;
+}
+
+/* BUTTON */
+.home-btn {
+    margin-top: 36px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    padding: 18px 42px;
+    background: linear-gradient(145deg, #4ECDC4, #44A08D);
+    color: white;
+    border-radius: 18px;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.home-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+}
+
+/* FIREWORKS */
+.firework {
+    position: fixed;
+    top: -40px;
+    font-size: 22px;
+    animation: fall linear forwards;
+    pointer-events: none;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="winner-wrapper">
+    <img src="Winner.png" alt="Winner Logo" class="winner-logo">
+    <a href="index.html" class="home-btn">Back to Home</a>
+</div>
+
+<script>
+const fireworks = ['✨','🎆','🎇','💥','⭐'];
+
+function launchFirework() {
+    const fw = document.createElement('div');
+    fw.className = 'firework';
+    fw.textContent = fireworks[Math.floor(Math.random() * fireworks.length)];
+    fw.style.left = Math.random() * 100 + 'vw';
+    fw.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
+    document.body.appendChild(fw);
+
+    setTimeout(() => fw.remove(), 4000);
+}
+
+setInterval(launchFirework, 180);
+</script>
+
+</body>
+</html>

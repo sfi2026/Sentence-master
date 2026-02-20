@@ -1,0 +1,503 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Round 2: Challenge</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&display=swap" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Bubblegum Sans', cursive;
+    background: linear-gradient(135deg, #4ECDC4, #44A08D);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ================= TIMER ================= */
+.timer-container {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 18px;
+    height: 100vh;
+    background: #eee;
+    z-index: 100;
+}
+
+.timer-bar {
+    width: 100%;
+    height: 100%;
+    background: red;
+    animation: countdown 600s linear forwards; /* 10 minutes */
+}
+
+@keyframes countdown {
+    from { height: 100%; }
+    to   { height: 0%; }
+}
+
+/* ================= CARD ================= */
+.question-container {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 1000px;
+    width: calc(100% - 40px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    text-align: center;
+}
+
+.round-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 42px;
+    color: #44A08D;
+    margin-bottom: 10px;
+}
+
+.question-number {
+    font-family: 'Fredoka One', cursive;
+    font-size: 26px;
+    color: #FF6B6B;
+    margin-bottom: 25px;
+}
+
+.question-box {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 15px;
+    padding: 30px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.original-sentence {
+    font-size: 24px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.change-instruction {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    color: #FFD700;
+}
+
+/* ================= ANSWER ================= */
+.answer-section {
+    display: none;
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.answer-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    color: #4ECDC4;
+    margin-bottom: 10px;
+}
+
+.answer-text {
+    font-size: 22px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    border: 3px solid #4ECDC4;
+}
+
+/* ================= CONTROLS ================= */
+.controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    padding: 15px 35px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    color: white;
+    text-transform: uppercase;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn-show { background: linear-gradient(145deg, #4ECDC4, #44A08D); }
+.btn-next { background: linear-gradient(145deg, #FFD700, #FFA500); }
+.btn-end  { background: linear-gradient(145deg, #FF6B6B, #EE5A6F); }
+.btn-home { background: linear-gradient(145deg, #95a5a6, #7f8c8d); }
+
+.hidden { display: none !important; }
+
+@media (max-width: 768px) {
+    .original-sentence { font-size: 20px; }
+    .controls { flex-direction: column; }
+    .control-btn { width: 100%; }
+}
+</style>
+</head>
+
+<body>
+
+//TIMER
+<div class="timer-container">
+    <div class="timer-bar"></div>
+</div>
+
+<div class="question-container">
+    <div class="round-title">Round 2: Challenge</div>
+    <div class="question-number" id="questionNumber"></div>
+
+    <div class="question-box">
+        <div class="original-sentence" id="originalSentence"></div>
+        <div class="change-instruction" id="changeInstruction"></div>
+    </div>
+
+    <div class="answer-section" id="answerSection">
+        <div class="answer-label">✓ Correct Answer</div>
+        <div class="answer-text" id="answerText"></div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn btn-show" id="showAnswerBtn">Show Answer</button>
+        <button class="control-btn btn-next hidden" id="nextBtn">Next</button>
+        <button class="control-btn btn-end hidden" id="endBtn">End Game</button>
+        <button class="control-btn btn-home" onclick="location.href='index.html'">Home</button>
+    </div>
+</div>
+
+<script>
+let questions = [];
+let currentIndex = 0;
+
+/* LOAD CSV */
+fetch('questions.csv')
+    .then(res => res.text())
+    .then(csv => {
+        const lines = csv.split('\n');
+        for (let i = 1; i < lines.length; i++) {
+            const p = lines[i].split(',');
+            if (p.length >= 4) {
+                questions.push({
+                    original: p[1].trim(),
+                    changeTo: p[2].trim(),
+                    answer: p[3].trim()
+                });
+            }
+        }
+        questions.sort(() => Math.random() - 0.5);
+        showQuestion();
+    });
+
+function showQuestion() {
+    if (currentIndex >= questions.length) {
+        location.href = 'winner.html';
+        return;
+    }
+
+    const q = questions[currentIndex];
+
+    $('#questionNumber').text(`Question ${currentIndex + 1}`);
+    $('#originalSentence').text(q.original);
+    $('#changeInstruction').text(`→ Change to: ${q.changeTo}`);
+    $('#answerText').text(q.answer);
+
+    $('#answerSection').hide();
+    $('#showAnswerBtn').removeClass('hidden');
+    $('#nextBtn, #endBtn').addClass('hidden');
+}
+
+$('#showAnswerBtn').on('click', () => {
+    $('#answerSection').slideDown(300);
+    $('#showAnswerBtn').addClass('hidden');
+    $('#nextBtn, #endBtn').removeClass('hidden');
+});
+
+$('#nextBtn').on('click', () => {
+    currentIndex++;
+    showQuestion();
+});
+
+$('#endBtn').on('click', () => {
+    if (confirm('End the game?')) {
+        location.href = 'winner.html';
+    }
+});
+
+/* AUTO END AFTER 10 MINUTES */
+setTimeout(() => {
+    location.href = 'winner.html';
+}, 600000);
+</script>
+
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Round 2: Challenge</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&display=swap" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Bubblegum Sans', cursive;
+    background: linear-gradient(135deg, #4ECDC4, #44A08D);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== TIMER ===== */
+.timer-container {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 18px;
+    height: 100vh;
+    background: #eee;
+    z-index: 100;
+}
+
+.timer-bar {
+    width: 100%;
+    height: 100%;
+    background: red;
+    animation: countdown 600s linear forwards;
+}
+
+@keyframes countdown {
+    from { height: 100%; }
+    to { height: 0%; }
+}
+
+/* ===== MAIN CARD ===== */
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 1000px;
+    width: calc(100% - 40px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    text-align: center;
+}
+
+.round-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 42px;
+    color: #44A08D;
+    margin-bottom: 10px;
+}
+
+.question-number {
+    font-family: 'Fredoka One', cursive;
+    font-size: 26px;
+    color: #FF6B6B;
+    margin-bottom: 25px;
+}
+
+.question-box {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 15px;
+    padding: 30px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.original {
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.instruction {
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    color: #FFD700;
+}
+
+/* ===== CONTROLS ===== */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    padding: 18px 45px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    color: white;
+    text-transform: uppercase;
+}
+
+.btn-next {
+    background: linear-gradient(145deg, #FFD700, #FFA500);
+}
+
+.btn-end {
+    background: linear-gradient(145deg, #FF6B6B, #EE5A6F);
+}
+
+/* ===== REVIEW ===== */
+.review {
+    display: none;
+    background: white;
+    padding: 40px;
+    max-width: 1200px;
+    width: calc(100% - 40px);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.review h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 40px;
+    color: #FF6B6B;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.review-item {
+    margin-bottom: 35px;
+}
+
+.review-item p {
+    font-size: 26px;
+    margin-bottom: 6px;
+}
+
+.answer {
+    font-weight: bold;
+    color: #2c3e50;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TIMER -->
+<div class="timer-container">
+    <div class="timer-bar"></div>
+</div>
+
+<!-- GAME VIEW -->
+<div class="card" id="gameView">
+    <div class="round-title">Round 2: Challenge</div>
+    <div class="question-number" id="questionNumber"></div>
+
+    <div class="question-box">
+        <div class="original" id="originalSentence"></div>
+        <div class="instruction" id="instruction"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-next" id="nextBtn">Next</button>
+        <button class="btn btn-end" id="endBtn">End</button>
+    </div>
+</div>
+
+<!-- REVIEW VIEW -->
+<div class="review" id="reviewView">
+    <h2>Answer Review</h2>
+    <div id="reviewList"></div>
+</div>
+
+<script>
+let questions = [];
+let index = 0;
+
+/* LOAD QUESTIONS */
+fetch('questions.csv')
+    .then(r => r.text())
+    .then(csv => {
+        const lines = csv.split('\n');
+        for (let i = 1; i < lines.length; i++) {
+            const p = lines[i].split(',');
+            if (p.length >= 4) {
+                questions.push({
+                    q: p[1].trim(),
+                    c: p[2].trim(),
+                    a: p[3].trim()
+                });
+            }
+        }
+        questions.sort(() => Math.random() - 0.5);
+        showQuestion();
+    });
+
+function showQuestion() {
+    if (index >= questions.length) index = 0;
+    const q = questions[index];
+    $('#questionNumber').text(`Question ${index + 1}`);
+    $('#originalSentence').text(q.q);
+    $('#instruction').text(`→ Change to: ${q.c}`);
+}
+
+$('#nextBtn').click(() => {
+    index++;
+    showQuestion();
+});
+
+$('#endBtn').click(showAnswers);
+
+/* TIME UP */
+setTimeout(showAnswers, 600000);
+
+function showAnswers() {
+    $('#gameView').hide();
+    $('#reviewView').show();
+    $('#reviewList').empty();
+
+    questions.forEach((q, i) => {
+        $('#reviewList').append(`
+            <div class="review-item">
+                <p><strong>Question ${i + 1}</strong></p>
+                <p>${q.q}</p>
+                <p>→ ${q.c}</p>
+                <p class="answer">✔ ${q.a}</p>
+            </div>
+        `);
+    });
+}
+</script>
+
+</body>
+</html>

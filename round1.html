@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Round 1 – Team Battle</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&display=swap" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Bubblegum Sans', cursive;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* ================= TIMER BAR ================= */
+.timer-container {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 18px;
+    background: #eee;
+}
+
+.timer-bar {
+    width: 100%;
+    height: 100%;
+    background: red;
+    animation: countdown 600s linear forwards;
+}
+
+@keyframes countdown {
+    from { height: 100%; }
+    to { height: 0%; }
+}
+
+/* ================= MAIN CARD ================= */
+.question-container {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 1000px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    text-align: center;
+}
+
+.stage-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 42px;
+    color: #FF6B6B;
+    margin-bottom: 10px;
+}
+
+.stage-subtitle {
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+.question-number {
+    font-family: 'Fredoka One', cursive;
+    font-size: 26px;
+    color: #4ECDC4;
+    margin-bottom: 20px;
+}
+
+.question-box {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 15px;
+    padding: 30px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.original-sentence {
+    font-size: 26px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.change-instruction {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    color: #FFD700;
+}
+
+/* ================= ANSWER ================= */
+.answer-section {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    display: none;
+}
+
+.answer-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    color: #4ECDC4;
+    margin-bottom: 15px;
+}
+
+.answer-text {
+    font-size: 22px;
+    color: #2c3e50;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    border: 3px solid #4ECDC4;
+}
+
+/* ================= CONTROLS ================= */
+.controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    padding: 15px 35px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    color: white;
+    text-transform: uppercase;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.btn-show { background: linear-gradient(145deg, #4ECDC4, #44A08D); }
+.btn-next { background: linear-gradient(145deg, #FFD700, #FFA500); }
+.btn-end  { background: linear-gradient(145deg, #FF6B6B, #EE5A6F); }
+.btn-home { background: linear-gradient(145deg, #95a5a6, #7f8c8d); }
+
+.hidden { display: none !important; }
+
+@media (max-width: 768px) {
+    .original-sentence { font-size: 22px; }
+    .controls { flex-direction: column; }
+    .control-btn { width: 100%; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- TIMER -->
+<div class="timer-container">
+    <div class="timer-bar"></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="question-container">
+    <h1 class="stage-title">🏆 Round 1: Team Battle</h1>
+    <p class="stage-subtitle">Most correct answers wins!</p>
+
+    <div class="question-number" id="questionNumber"></div>
+
+    <div class="question-box">
+        <div class="original-sentence" id="originalSentence"></div>
+        <div class="change-instruction" id="changeInstruction"></div>
+    </div>
+
+    <div class="answer-section" id="answerSection">
+        <div class="answer-label">✓ Correct Answer</div>
+        <div class="answer-text" id="answerText"></div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn btn-show" id="showAnswerBtn">Show Answer</button>
+        <button class="control-btn btn-next hidden" id="nextBtn">Next</button>
+        <button class="control-btn btn-end hidden" id="endBtn">End Game</button>
+        <button class="control-btn btn-home" onclick="location.href='index.html'">Home</button>
+    </div>
+</div>
+
+<script>
+let questions = [];
+let currentIndex = 0;
+
+$(document).ready(function () {
+    fetch('questions.csv')
+        .then(res => res.text())
+        .then(csv => {
+            parseCSV(csv);
+            showQuestion();
+        })
+        .catch(() => alert('Cannot load questions.csv'));
+});
+
+function parseCSV(csv) {
+    const lines = csv.split('\n');
+    questions = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        const parts = lines[i].split(',');
+        if (parts.length >= 4) {
+            questions.push({
+                original: parts[1].trim(),
+                changeTo: parts[2].trim(),
+                answer: parts[3].trim()
+            });
+        }
+    }
+
+    // ✅ RANDOMIZE QUESTIONS
+    questions.sort(() => Math.random() - 0.5);
+}
+
+function showQuestion() {
+    if (currentIndex >= questions.length) {
+        location.href = 'winner.html';
+        return;
+    }
+
+    const q = questions[currentIndex];
+
+    $('#questionNumber').text(`Question ${currentIndex + 1}`);
+    $('#originalSentence').text(q.original);
+    $('#changeInstruction').text(`→ Change to: ${q.changeTo}`);
+    $('#answerText').text(q.answer);
+
+    $('#answerSection').hide();
+    $('#showAnswerBtn').removeClass('hidden');
+    $('#nextBtn, #endBtn').addClass('hidden');
+}
+
+$('#showAnswerBtn').on('click', function () {
+    $('#answerSection').slideDown();
+    $(this).addClass('hidden');
+    $('#nextBtn, #endBtn').removeClass('hidden');
+});
+
+$('#nextBtn').on('click', function () {
+    currentIndex++;
+    showQuestion();
+});
+
+$('#endBtn').on('click', function () {
+    location.href = 'winner.html';
+});
+</script>
+
+</body>
+</html>
