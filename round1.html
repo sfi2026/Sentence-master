@@ -31,14 +31,14 @@ body {
     top: 0;
     height: 100vh;
     width: 18px;
-    background: #eee;
+    background: rgba(0,0,0,0.15);
     z-index: 100;
 }
 
 .timer-bar {
     width: 100%;
     height: 0%; /* Start from 0% */
-    background: red;
+    background: #00FF00; /* Green color matching round3.html */
     position: absolute;
     top: 0; /* Anchor to top */
     left: 0;
@@ -153,7 +153,6 @@ body {
 
 .btn-show { background: linear-gradient(145deg, #4ECDC4, #44A08D); }
 .btn-next { background: linear-gradient(145deg, #FFD700, #FFA500); }
-.btn-end  { background: linear-gradient(145deg, #FF6B6B, #EE5A6F); }
 .btn-home { background: linear-gradient(145deg, #95a5a6, #7f8c8d); }
 
 .hidden { display: none !important; }
@@ -193,7 +192,6 @@ body {
     <div class="controls">
         <button class="control-btn btn-show" id="showAnswerBtn">Show Answer</button>
         <button class="control-btn btn-next hidden" id="nextBtn">Next</button>
-        <button class="control-btn btn-end hidden" id="endBtn">End Game</button>
         <button class="control-btn btn-home" onclick="location.href='index.html'">Home</button>
     </div>
 </div>
@@ -254,23 +252,18 @@ function showQuestion() {
 
     $('#answerSection').hide();
     $('#showAnswerBtn').removeClass('hidden');
-    $('#nextBtn, #endBtn').addClass('hidden');
+    $('#nextBtn').addClass('hidden');
 }
 
 $('#showAnswerBtn').on('click', function () {
     $('#answerSection').slideDown();
     $(this).addClass('hidden');
-    $('#nextBtn, #endBtn').removeClass('hidden');
+    $('#nextBtn').removeClass('hidden');
 });
 
 $('#nextBtn').on('click', function () {
     currentIndex++;
     showQuestion();
-});
-
-$('#endBtn').on('click', function () {
-    clearTimeout(timerTimeout);
-    location.href = 'winner.html';
 });
 
 // Clear timeout when leaving page

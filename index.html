@@ -57,7 +57,7 @@
         }
 
         .logo-container {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -77,6 +77,56 @@
             margin-top: 0;
         }
 
+        /* ===== FILE UPLOAD SECTION ===== */
+        .upload-section {
+            margin: 10px auto 30px auto;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            border-radius: 50px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-label {
+            font-family: 'Fredoka One', cursive;
+            font-size: 16px;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .file-label i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #fileName {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 16px;
+            margin-left: 15px;
+            color: #333;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
         .button-grid {
             display: flex;
             gap: 25px;
@@ -85,7 +135,7 @@
             padding: 0 20px;
             justify-content: center;
             flex-wrap: nowrap;
-            margin-top: -20px;
+            margin-top: 10px;
         }
 
         .game-button {
@@ -203,6 +253,20 @@
                 font-size: 24px;
                 padding: 25px 30px;
             }
+            
+            .upload-section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                background: none;
+                backdrop-filter: none;
+            }
+            
+            #fileName {
+                margin-left: 0;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
@@ -222,20 +286,86 @@
             <img src="Sentence Master Logo.png" alt="Sentence Master Challenge" class="logo">
         </div>
 
+        <!-- FILE UPLOAD SECTION -->
+        <div class="upload-section">
+            <label for="fileInput" class="file-label">
+                <span>📁</span> Choose CSV File
+            </label>
+            <input type="file" id="fileInput" accept=".csv">
+            <span id="fileName">No file chosen</span>
+        </div>
+
         <div class="button-grid">
-            <a href="round1.html" class="game-button btn-stage1">
-                Round 1: Team Effort, Buzz & Speak! (10 mins)
+            <a href="round1.html" class="game-button btn-stage1" id="round1Link">
+                Round 1: Team, 10mins
             </a>
-            <a href="round2.html" class="game-button btn-stage2">
-                Round 2: Writing Challenge (10mins)
+            <a href="round2.html" class="game-button btn-stage2" id="round2Link">
+                Round 2: Writing Challenge, 10mins
             </a>
-            <a href="round3.html" class="game-button btn-stage3">
-                Round 3: Survivor Challenge
+            <a href="round3.html" class="game-button btn-stage3" id="round3Link">
+                Round 3: 1 vs. 1, Ultimate Battle
             </a>
             <!--<button class="game-button btn-exit" onclick="if(confirm('Are you sure?')) window.close();">
                 Exit
             </button>-->
         </div>
     </div>
+
+    <script>
+        // File upload handling with localStorage
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        
+        // Check if a file was previously selected
+        const savedFileName = localStorage.getItem('sentenceMasterFileName');
+        if (savedFileName) {
+            fileName.textContent = savedFileName;
+        }
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Update file name display
+                fileName.textContent = file.name;
+                localStorage.setItem('sentenceMasterFileName', file.name);
+                
+                // Read the file
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    // Store the CSV content in localStorage
+                    localStorage.setItem('sentenceMasterCSV', event.target.result);
+                    
+                    // Show success message (optional)
+                    fileName.style.background = '#e8f5e8';
+                    setTimeout(() => {
+                        fileName.style.background = 'rgba(255, 255, 255, 0.8)';
+                    }, 500);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Handle round links - ensure CSV is loaded before proceeding
+        document.getElementById('round1Link').addEventListener('click', function(e) {
+            if (!localStorage.getItem('sentenceMasterCSV')) {
+                e.preventDefault();
+                alert('⚠️ Please select a CSV file first!');
+            }
+        });
+
+        document.getElementById('round2Link').addEventListener('click', function(e) {
+            if (!localStorage.getItem('sentenceMasterCSV')) {
+                e.preventDefault();
+                alert('⚠️ Please select a CSV file first!');
+            }
+        });
+
+        document.getElementById('round3Link').addEventListener('click', function(e) {
+            if (!localStorage.getItem('sentenceMasterCSV')) {
+                e.preventDefault();
+                alert('⚠️ Please select a CSV file first!');
+            }
+        });
+    </script>
 </body>
 </html>
