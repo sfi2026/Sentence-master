@@ -42,7 +42,7 @@
             text-align: center;
             z-index: 1;
             animation: slideIn 0.8s ease-out;
-            padding-bottom: 100px; /* ✅ space under buttons */
+            padding-bottom: 100px;
         }
 
         @keyframes slideIn {
@@ -71,7 +71,7 @@
         }
 
         .logo {
-            max-width: 350px;  /* Reduced logo size */
+            max-width: 350px;
             width: 90%;
             margin-top: 0;
         }
@@ -80,57 +80,54 @@
         .csv-selector {
             margin: 15px auto 30px auto;
             display: flex;
-            gap: 20px;
+            gap: 30px;
             justify-content: center;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .csv-option {
             font-family: 'Fredoka One', cursive;
-            font-size: 18px;
-            padding: 12px 30px;
+            font-size: 20px;
+            padding: 15px 40px;
             border: none;
-            border-radius: 40px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            background: white;
-            color: #333;
-            border: 3px solid transparent;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+            color: white;
+            background: #1A3A5F;  /* Darker blue color */
+            border: 2px solid #2B4F7C;
         }
 
         .csv-option:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+            background: #1F4770;  /* Slightly lighter on hover */
         }
 
-        .csv-option.active {
-            border-color: #FF6B6B;
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: white;
+        /* Selected button - grows larger */
+        .csv-option.selected {
+            transform: scale(1.15);
+            background: #0F2A44;  /* Even darker blue when selected */
+            border: 3px solid #FFD700;  /* Gold border for emphasis */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            z-index: 2;
         }
 
-        .csv-option.easy {
-            background: linear-gradient(145deg, #4ECDC4, #44A08D);
-            color: white;
+        /* Unselected button - shrinks */
+        .csv-option:not(.selected) {
+            transform: scale(0.85);
+            opacity: 0.8;
+            filter: brightness(0.8);
         }
 
-        .csv-option.hard {
-            background: linear-gradient(145deg, #FF6B6B, #EE5A6F);
-            color: white;
-        }
-
-        #selectedCsvFile {
-            font-family: 'Bubblegum Sans', cursive;
-            font-size: 16px;
-            margin-left: 15px;
-            color: #333;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 8px 20px;
-            border-radius: 50px;
-            display: inline-block;
+        /* When one is selected, the other shrinks - this rule works with the one above */
+        .csv-selector:has(.selected) .csv-option:not(.selected) {
+            transform: scale(0.7);  /* Shrink even more */
+            opacity: 0.6;
         }
 
         .button-grid {
@@ -146,8 +143,8 @@
 
         .game-button {
             font-family: 'Fredoka One', cursive;
-            font-size: 20px;  /* Reduced button text size */
-            padding: 18px 28px;  /* Reduced button padding */
+            font-size: 20px;
+            padding: 18px 28px;
             border: none;
             border-radius: 16px;
             cursor: pointer;
@@ -262,12 +259,21 @@
             
             .csv-selector {
                 flex-direction: column;
-                align-items: center;
-                gap: 12px;
+                gap: 15px;
             }
             
             .csv-option {
-                width: 200px;
+                width: 250px;
+                font-size: 18px;
+                padding: 12px 30px;
+            }
+            
+            .csv-option.selected {
+                transform: scale(1.1);
+            }
+            
+            .csv-selector:has(.selected) .csv-option:not(.selected) {
+                transform: scale(0.8);
             }
         }
     </style>
@@ -288,14 +294,11 @@
             <img src="Sentence Master Logo.png" alt="Sentence Master Challenge" class="logo">
         </div>
 
-        <!-- CSV OPTIONS SECTION - TWO BUTTONS -->
+        <!-- CSV OPTIONS SECTION - TWO DARK BLUE BUTTONS -->
         <div class="csv-selector">
-            <button class="csv-option easy" id="easyCsvBtn">📚 Beginner Level</button>
-            <button class="csv-option hard" id="hardCsvBtn">🚀 Advanced Level</button>
+            <button class="csv-option" id="easyCsvBtn">📚 Beginner Level</button>
+            <button class="csv-option" id="hardCsvBtn">🚀 Advanced Level</button>
         </div>
-        
-        <!-- Hidden status display (optional) -->
-        <div id="selectedCsvFile" style="display: none;"></div>
 
         <div class="button-grid">
             <a href="round1.html" class="game-button btn-stage1" id="round1Link">
@@ -307,9 +310,6 @@
             <a href="round3.html" class="game-button btn-stage3" id="round3Link">
                 Round 3: 1 vs. 1, Ultimate Battle
             </a>
-            <!--<button class="game-button btn-exit" onclick="if(confirm('Are you sure?')) window.close();">
-                Exit
-            </button>-->
         </div>
     </div>
 
@@ -323,29 +323,25 @@
         // Default to easy if nothing selected
         let selectedLevel = localStorage.getItem('sentenceMasterLevel') || 'easy';
         
-        // Update button active states
+        // Get button elements
         const easyBtn = document.getElementById('easyCsvBtn');
         const hardBtn = document.getElementById('hardCsvBtn');
         
         function setActiveLevel(level) {
             selectedLevel = level;
             localStorage.setItem('sentenceMasterLevel', level);
-            
-            // Update button styles
-            if (level === 'easy') {
-                easyBtn.style.transform = 'scale(1.05)';
-                hardBtn.style.transform = 'scale(1)';
-                easyBtn.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.3)';
-                hardBtn.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
-            } else {
-                hardBtn.style.transform = 'scale(1.05)';
-                easyBtn.style.transform = 'scale(1)';
-                hardBtn.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.3)';
-                easyBtn.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
-            }
-            
-            // Store the actual filename
             localStorage.setItem('sentenceMasterCSV', CSV_FILES[level]);
+            
+            // Remove selected class from both buttons
+            easyBtn.classList.remove('selected');
+            hardBtn.classList.remove('selected');
+            
+            // Add selected class to the active button
+            if (level === 'easy') {
+                easyBtn.classList.add('selected');
+            } else {
+                hardBtn.classList.add('selected');
+            }
         }
         
         // Set initial active state
@@ -360,7 +356,7 @@
             setActiveLevel('hard');
         });
 
-        // Handle round links - ensure level is selected (though there's always a default)
+        // Handle round links - ensure level is selected
         document.getElementById('round1Link').addEventListener('click', function(e) {
             if (!localStorage.getItem('sentenceMasterCSV')) {
                 e.preventDefault();
