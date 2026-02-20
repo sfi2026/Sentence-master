@@ -124,29 +124,29 @@
             filter: brightness(0.8);
         }
 
-        /* When one is selected, the other shrinks - this rule works with the one above */
+        /* When one is selected, the other shrinks */
         .csv-selector:has(.selected) .csv-option:not(.selected) {
-            transform: scale(0.7);  /* Shrink even more */
+            transform: scale(0.7);
             opacity: 0.6;
         }
 
         .button-grid {
             display: flex;
-            gap: 25px;
-            max-width: 1200px;
+            gap: 30px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 0 20px;
             justify-content: center;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             margin-top: 10px;
         }
 
         .game-button {
             font-family: 'Fredoka One', cursive;
-            font-size: 20px;
-            padding: 18px 28px;
+            font-size: 22px;
+            padding: 25px 35px;
             border: none;
-            border-radius: 16px;
+            border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -160,6 +160,11 @@
             justify-content: center;
             color: white;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            flex: 1;
+            min-width: 300px;
+            max-width: 450px;
+            line-height: 1.3;
+            text-align: center;
         }
 
         .game-button::before {
@@ -176,8 +181,8 @@
         }
 
         .game-button:hover::before {
-            width: 400px;
-            height: 400px;
+            width: 600px;
+            height: 600px;
         }
 
         .game-button:hover {
@@ -189,22 +194,12 @@
             transform: translateY(-2px) scale(1.02);
         }
 
-        .btn-stage1 {
+        .btn-round1 {
             background: linear-gradient(145deg, #FFD700, #FFA500);
         }
 
-        .btn-stage2 {
-            background: linear-gradient(145deg, #4ECDC4, #44A08D);
-        }
-
-        .btn-stage3 {
+        .btn-round2 {
             background: linear-gradient(145deg, #FF6B6B, #EE5A6F);
-        }
-
-        .btn-exit {
-            background: linear-gradient(145deg, #95a5a6, #7f8c8d);
-            font-size: 24px;
-            padding: 20px;
         }
 
         .sparkle {
@@ -250,11 +245,14 @@
             .button-grid {
                 flex-direction: column;
                 gap: 20px;
+                align-items: center;
             }
 
             .game-button {
-                font-size: 18px;
-                padding: 15px 25px;
+                font-size: 20px;
+                padding: 20px 25px;
+                min-width: 280px;
+                width: 100%;
             }
             
             .csv-selector {
@@ -300,24 +298,22 @@
             <button class="csv-option" id="hardCsvBtn">🚀 Advanced Level</button>
         </div>
 
+        <!-- TWO GAME BUTTONS -->
         <div class="button-grid">
-            <a href="round1.html" class="game-button btn-stage1" id="round1Link">
-                Round 1: Team, 10mins
+            <a href="round1.html" class="game-button btn-round1" id="round1Link">
+                Round 1:<br>Team Effort, Buzz & Speak!
             </a>
-            <a href="round2.html" class="game-button btn-stage2" id="round2Link">
-                Round 2: Writing Challenge, 10mins
-            </a>
-            <a href="round3.html" class="game-button btn-stage3" id="round3Link">
-                Round 3: 1 vs. 1, Ultimate Battle
+            <a href="round2.html" class="game-button btn-round2" id="round2Link">
+                Survivor Battle
             </a>
         </div>
     </div>
 
     <script>
-        // Define the two CSV files
+        // Define the two CSV files - match your actual filenames
         const CSV_FILES = {
-            easy: 'questions_easy.csv',
-            hard: 'questions_hard.csv'
+            easy: 'questions-easy.csv',  // or 'questions_easy.csv' - check your actual filename
+            hard: 'questions-hard.csv'   // or 'questions_hard.csv' - check your actual filename
         };
         
         // Default to easy if nothing selected
@@ -342,6 +338,9 @@
             } else {
                 hardBtn.classList.add('selected');
             }
+            
+            console.log('Selected level:', level);
+            console.log('Selected CSV:', CSV_FILES[level]);
         }
         
         // Set initial active state
@@ -365,13 +364,6 @@
         });
 
         document.getElementById('round2Link').addEventListener('click', function(e) {
-            if (!localStorage.getItem('sentenceMasterCSV')) {
-                e.preventDefault();
-                alert('⚠️ Please select a difficulty level first!');
-            }
-        });
-
-        document.getElementById('round3Link').addEventListener('click', function(e) {
             if (!localStorage.getItem('sentenceMasterCSV')) {
                 e.preventDefault();
                 alert('⚠️ Please select a difficulty level first!');
