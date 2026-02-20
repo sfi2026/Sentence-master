@@ -55,8 +55,8 @@ body {
 .question-container {
     background: white;
     border-radius: 20px;
-    padding: 30px;
-    max-width: 1000px;
+    padding: 40px;
+    max-width: 1200px;
     width: 95%;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     text-align: center;
@@ -68,7 +68,7 @@ body {
 }
 
 .question-container::-webkit-scrollbar {
-    width: 10px;
+    width: 12px;
 }
 
 .question-container::-webkit-scrollbar-track {
@@ -83,62 +83,63 @@ body {
 
 .stage-title {
     font-family: 'Fredoka One', cursive;
-    font-size: 42px;
+    font-size: 48px;
     color: #FF6B6B;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     flex-shrink: 0;
 }
 
 .stage-subtitle {
-    font-size: 20px;
-    margin-bottom: 20px;
+    font-size: 24px;
+    margin-bottom: 25px;
     flex-shrink: 0;
 }
 
 .question-number {
     font-family: 'Fredoka One', cursive;
-    font-size: 26px;
+    font-size: 32px;
     color: #4ECDC4;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     flex-shrink: 0;
 }
 
 .question-box {
     background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 15px;
-    padding: 25px;
+    border-radius: 20px;
+    padding: 40px;
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     flex-shrink: 0;
 }
 
 .original-sentence {
-    font-size: 26px;
-    margin-bottom: 15px;
-    line-height: 1.4;
+    font-size: 36px;
+    margin-bottom: 25px;
+    line-height: 1.5;
     word-wrap: break-word;
+    font-weight: bold;
 }
 
 .change-instruction {
     font-family: 'Fredoka One', cursive;
-    font-size: 20px;
+    font-size: 28px;
     color: #FFD700;
     word-wrap: break-word;
 }
 
 .answer-section {
     background: #f8f9fa;
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 20px;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
     display: none;
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
     flex-shrink: 0;
 }
 
 .answer-section::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 .answer-section::-webkit-scrollbar-track {
@@ -153,30 +154,31 @@ body {
 
 .answer-label {
     font-family: 'Fredoka One', cursive;
-    font-size: 22px;
+    font-size: 32px;
     color: #4ECDC4;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .answer-text {
-    font-size: 22px;
+    font-size: 36px;
     color: #2c3e50;
-    padding: 15px;
+    padding: 25px;
     background: white;
-    border-radius: 10px;
-    border: 3px solid #4ECDC4;
+    border-radius: 15px;
+    border: 4px solid #4ECDC4;
     word-wrap: break-word;
+    font-weight: bold;
 }
 
 .controls {
     display: flex;
-    gap: 15px;
+    gap: 20px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 10px;
-    padding: 15px 0 5px 0;
+    margin-top: 15px;
+    padding: 20px 0 10px 0;
     background: white;
-    border-top: 2px solid #f0f0f0;
+    border-top: 3px solid #f0f0f0;
     flex-shrink: 0;
     position: sticky;
     bottom: 0;
@@ -185,16 +187,16 @@ body {
 
 .control-btn {
     font-family: 'Fredoka One', cursive;
-    font-size: 20px;
-    padding: 15px 35px;
+    font-size: 28px;
+    padding: 20px 45px;
     border: none;
-    border-radius: 15px;
+    border-radius: 20px;
     cursor: pointer;
     color: white;
     text-transform: uppercase;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     transition: all 0.3s ease;
-    min-width: 160px;
+    min-width: 200px;
 }
 
 .control-btn:hover {
@@ -223,10 +225,10 @@ body {
 
 .modal-content {
     background: white;
-    padding: 40px;
-    border-radius: 30px;
+    padding: 50px;
+    border-radius: 40px;
     text-align: center;
-    max-width: 500px;
+    max-width: 600px;
     width: 90%;
     box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     animation: modalPop 0.5s ease-out;
@@ -244,8 +246,8 @@ body {
 }
 
 .modal-icon {
-    font-size: 80px;
-    margin-bottom: 20px;
+    font-size: 100px;
+    margin-bottom: 25px;
     animation: shake 0.5s ease-in-out;
 }
 
@@ -257,24 +259,24 @@ body {
 
 .modal-content h2 {
     font-family: 'Fredoka One', cursive;
-    font-size: 48px;
+    font-size: 56px;
     color: #FF6B6B;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .modal-content p {
-    font-size: 24px;
-    margin-bottom: 30px;
+    font-size: 28px;
+    margin-bottom: 35px;
     color: #333;
 }
 
 .modal-btn {
     font-family: 'Fredoka One', cursive;
-    font-size: 24px;
-    padding: 15px 50px;
+    font-size: 28px;
+    padding: 18px 60px;
     background: linear-gradient(145deg, #FF6B6B, #EE5A6F);
     border: none;
-    border-radius: 50px;
+    border-radius: 60px;
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -287,74 +289,42 @@ body {
 }
 
 @media (max-width: 1024px) and (min-width: 768px) {
-    .question-container {
-        padding: 25px;
-        max-height: 85vh;
-    }
-    
     .stage-title {
-        font-size: 38px;
+        font-size: 42px;
     }
     
     .original-sentence {
-        font-size: 24px;
+        font-size: 32px;
+    }
+    
+    .answer-text {
+        font-size: 32px;
     }
     
     .control-btn {
-        font-size: 18px;
-        padding: 12px 25px;
-        min-width: 140px;
-    }
-    
-    .modal-content {
-        padding: 30px;
-    }
-    
-    .modal-content h2 {
-        font-size: 42px;
+        font-size: 24px;
+        padding: 16px 35px;
+        min-width: 180px;
     }
 }
 
 @media (max-width: 767px) {
-    body {
-        padding: 10px 10px 10px 0;
-        align-items: flex-start;
-    }
-    
-    .question-container {
-        padding: 20px;
-        max-height: none;
-    }
-    
     .stage-title {
-        font-size: 32px;
-    }
-    
-    .original-sentence { 
-        font-size: 22px; 
-    }
-    
-    .controls { 
-        flex-direction: column; 
-        align-items: center;
-        position: static;
-    }
-    
-    .control-btn { 
-        width: 100%;
-        min-width: auto;
-    }
-    
-    .modal-content {
-        padding: 25px;
-    }
-    
-    .modal-content h2 {
         font-size: 36px;
     }
     
-    .modal-icon {
-        font-size: 60px;
+    .original-sentence { 
+        font-size: 28px; 
+    }
+    
+    .answer-text {
+        font-size: 28px;
+    }
+    
+    .control-btn {
+        font-size: 22px;
+        padding: 15px 30px;
+        min-width: 160px;
     }
 }
 </style>
@@ -404,7 +374,6 @@ let currentIndex = 0;
 let timerTimeout;
 
 $(document).ready(function () {
-    // Get the selected CSV file from localStorage
     const selectedCsvFile = localStorage.getItem('sentenceMasterCSV');
     
     if (!selectedCsvFile) {
@@ -415,7 +384,6 @@ $(document).ready(function () {
     
     console.log('Loading CSV file:', selectedCsvFile);
     
-    // Add cache busting to prevent caching issues
     const url = selectedCsvFile + '?t=' + new Date().getTime();
     
     fetch(url)
@@ -430,20 +398,13 @@ $(document).ready(function () {
             parseCSV(csv);
             
             if (questions.length === 0) {
-                alert('No valid questions found in the CSV file. Please check the file format.\n\nFirst few lines of CSV:\n' + csv.substring(0, 300));
+                alert('No valid questions found in the CSV file. Please check the file format.');
                 return;
             }
             
             console.log('Questions loaded successfully:', questions.length);
-            
-            // Display first question as a test
-            if (questions.length > 0) {
-                console.log('First question:', questions[0]);
-            }
-            
             showQuestion();
             
-            // Set timer for 10 minutes (600000 ms)
             timerTimeout = setTimeout(function() {
                 showTimesUpModal();
             }, 600000);
@@ -461,31 +422,15 @@ $(document).ready(function () {
 function parseCSV(csv) {
     const lines = csv.split('\n');
     questions = [];
-    
-    console.log('Total lines in CSV:', lines.length);
 
-    // Skip header row (i=1 instead of i=0 to skip the header)
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
-        if (line === '') {
-            console.log(`Line ${i} is empty, skipping`);
-            continue;
-        }
+        if (line === '') continue;
         
-        console.log(`Processing line ${i}:`, line.substring(0, 50));
+        let parts = line.split(',');
         
-        // Try to parse with different delimiters
-        let parts = [];
-        
-        // First try comma
-        parts = line.split(',');
-        
-        // If we don't get at least 4 parts, try tab
         if (parts.length < 4) {
             parts = line.split('\t');
-            console.log(`Line ${i} using tab delimiter, parts:`, parts.length);
-        } else {
-            console.log(`Line ${i} using comma delimiter, parts:`, parts.length);
         }
         
         if (parts.length >= 4) {
@@ -495,37 +440,25 @@ function parseCSV(csv) {
                 answer: parts[3] ? parts[3].trim() : ''
             };
             
-            // Only add if all fields have content
             if (question.original && question.changeTo && question.answer) {
                 questions.push(question);
-                console.log(`Added question ${questions.length}:`, question.original.substring(0, 30));
-            } else {
-                console.log('Skipping line - missing fields:', question);
             }
-        } else {
-            console.log(`Line ${i} has insufficient parts:`, parts.length);
         }
     }
 
-    console.log('Total questions parsed:', questions.length);
-    
-    // RANDOMIZE QUESTIONS
     if (questions.length > 0) {
         questions.sort(() => Math.random() - 0.5);
-        console.log('Questions randomized');
     }
 }
 
 function showQuestion() {
     if (currentIndex >= questions.length) {
-        console.log('End of questions, going to winner');
         clearTimeout(timerTimeout);
-        location.href = 'winner.html';
+        location.href = 'index.html'; // Changed from winner.html to index.html
         return;
     }
 
     const q = questions[currentIndex];
-    console.log(`Showing question ${currentIndex + 1}:`, q);
 
     $('#questionNumber').text(`Question ${currentIndex + 1} of ${questions.length}`);
     $('#originalSentence').text(q.original);
@@ -560,9 +493,13 @@ $('#nextBtn').on('click', function () {
     showQuestion();
 });
 
+// Modal OK button click - NOW RETURNS TO INDEX.HTML
 $('#modalOkBtn').on('click', function() {
-    location.href = 'winner.html';
+    location.href = 'index.html'; // Changed from winner.html to index.html
 });
+
+// Also update the end of questions to go to index.html
+// (Already changed in showQuestion function above)
 
 window.addEventListener('beforeunload', function() {
     clearTimeout(timerTimeout);
