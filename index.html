@@ -71,52 +71,58 @@
         }
 
         .logo {
-            max-width: 350px;
+            max-width: 350px;  /* Reduced logo size */
             width: 90%;
-            /* filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3)); */
             margin-top: 0;
         }
 
-        /* ===== FILE UPLOAD SECTION ===== */
-        .upload-section {
-            margin: 10px auto 30px auto;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(5px);
-            border-radius: 50px;
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        /* ===== CSV OPTIONS SECTION ===== */
+        .csv-selector {
+            margin: 15px auto 30px auto;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .file-label {
+        .csv-option {
             font-family: 'Fredoka One', cursive;
-            font-size: 16px;
+            font-size: 18px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background: white;
+            color: #333;
+            border: 3px solid transparent;
+        }
+
+        .csv-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .csv-option.active {
+            border-color: #FF6B6B;
             background: linear-gradient(145deg, #667eea, #764ba2);
             color: white;
-            padding: 10px 25px;
-            border-radius: 50px;
-            cursor: pointer;
-            display: inline-block;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .file-label:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        .csv-option.easy {
+            background: linear-gradient(145deg, #4ECDC4, #44A08D);
+            color: white;
         }
 
-        .file-label i {
-            margin-right: 8px;
-            font-size: 18px;
+        .csv-option.hard {
+            background: linear-gradient(145deg, #FF6B6B, #EE5A6F);
+            color: white;
         }
 
-        #fileInput {
-            display: none;
-        }
-
-        #fileName {
+        #selectedCsvFile {
             font-family: 'Bubblegum Sans', cursive;
             font-size: 16px;
             margin-left: 15px;
@@ -140,8 +146,8 @@
 
         .game-button {
             font-family: 'Fredoka One', cursive;
-            font-size: 20px;
-            padding: 18px 28px;
+            font-size: 20px;  /* Reduced button text size */
+            padding: 18px 28px;  /* Reduced button padding */
             border: none;
             border-radius: 16px;
             cursor: pointer;
@@ -250,22 +256,18 @@
             }
 
             .game-button {
-                font-size: 24px;
-                padding: 25px 30px;
+                font-size: 18px;
+                padding: 15px 25px;
             }
             
-            .upload-section {
-                display: flex;
+            .csv-selector {
                 flex-direction: column;
                 align-items: center;
-                gap: 10px;
-                background: none;
-                backdrop-filter: none;
+                gap: 12px;
             }
             
-            #fileName {
-                margin-left: 0;
-                margin-top: 10px;
+            .csv-option {
+                width: 200px;
             }
         }
     </style>
@@ -286,14 +288,14 @@
             <img src="Sentence Master Logo.png" alt="Sentence Master Challenge" class="logo">
         </div>
 
-        <!-- FILE UPLOAD SECTION -->
-        <div class="upload-section">
-            <label for="fileInput" class="file-label">
-                <span>📁</span> Choose CSV File
-            </label>
-            <input type="file" id="fileInput" accept=".csv">
-            <span id="fileName">No file chosen</span>
+        <!-- CSV OPTIONS SECTION - TWO BUTTONS -->
+        <div class="csv-selector">
+            <button class="csv-option easy" id="easyCsvBtn">📚 Beginner Level</button>
+            <button class="csv-option hard" id="hardCsvBtn">🚀 Advanced Level</button>
         </div>
+        
+        <!-- Hidden status display (optional) -->
+        <div id="selectedCsvFile" style="display: none;"></div>
 
         <div class="button-grid">
             <a href="round1.html" class="game-button btn-stage1" id="round1Link">
@@ -312,58 +314,71 @@
     </div>
 
     <script>
-        // File upload handling with localStorage
-        const fileInput = document.getElementById('fileInput');
-        const fileName = document.getElementById('fileName');
+        // Define the two CSV files
+        const CSV_FILES = {
+            easy: 'questions_easy.csv',
+            hard: 'questions_hard.csv'
+        };
         
-        // Check if a file was previously selected
-        const savedFileName = localStorage.getItem('sentenceMasterFileName');
-        if (savedFileName) {
-            fileName.textContent = savedFileName;
-        }
-
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                // Update file name display
-                fileName.textContent = file.name;
-                localStorage.setItem('sentenceMasterFileName', file.name);
-                
-                // Read the file
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    // Store the CSV content in localStorage
-                    localStorage.setItem('sentenceMasterCSV', event.target.result);
-                    
-                    // Show success message (optional)
-                    fileName.style.background = '#e8f5e8';
-                    setTimeout(() => {
-                        fileName.style.background = 'rgba(255, 255, 255, 0.8)';
-                    }, 500);
-                };
-                reader.readAsText(file);
+        // Default to easy if nothing selected
+        let selectedLevel = localStorage.getItem('sentenceMasterLevel') || 'easy';
+        
+        // Update button active states
+        const easyBtn = document.getElementById('easyCsvBtn');
+        const hardBtn = document.getElementById('hardCsvBtn');
+        
+        function setActiveLevel(level) {
+            selectedLevel = level;
+            localStorage.setItem('sentenceMasterLevel', level);
+            
+            // Update button styles
+            if (level === 'easy') {
+                easyBtn.style.transform = 'scale(1.05)';
+                hardBtn.style.transform = 'scale(1)';
+                easyBtn.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.3)';
+                hardBtn.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+            } else {
+                hardBtn.style.transform = 'scale(1.05)';
+                easyBtn.style.transform = 'scale(1)';
+                hardBtn.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.3)';
+                easyBtn.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
             }
+            
+            // Store the actual filename
+            localStorage.setItem('sentenceMasterCSV', CSV_FILES[level]);
+        }
+        
+        // Set initial active state
+        setActiveLevel(selectedLevel);
+        
+        // Add click handlers
+        easyBtn.addEventListener('click', function() {
+            setActiveLevel('easy');
+        });
+        
+        hardBtn.addEventListener('click', function() {
+            setActiveLevel('hard');
         });
 
-        // Handle round links - ensure CSV is loaded before proceeding
+        // Handle round links - ensure level is selected (though there's always a default)
         document.getElementById('round1Link').addEventListener('click', function(e) {
             if (!localStorage.getItem('sentenceMasterCSV')) {
                 e.preventDefault();
-                alert('⚠️ Please select a CSV file first!');
+                alert('⚠️ Please select a difficulty level first!');
             }
         });
 
         document.getElementById('round2Link').addEventListener('click', function(e) {
             if (!localStorage.getItem('sentenceMasterCSV')) {
                 e.preventDefault();
-                alert('⚠️ Please select a CSV file first!');
+                alert('⚠️ Please select a difficulty level first!');
             }
         });
 
         document.getElementById('round3Link').addEventListener('click', function(e) {
             if (!localStorage.getItem('sentenceMasterCSV')) {
                 e.preventDefault();
-                alert('⚠️ Please select a CSV file first!');
+                alert('⚠️ Please select a difficulty level first!');
             }
         });
     </script>
