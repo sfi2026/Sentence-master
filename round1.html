@@ -67,7 +67,6 @@ body {
     flex-direction: column;
 }
 
-/* Custom scrollbar */
 .question-container::-webkit-scrollbar {
     width: 10px;
 }
@@ -127,7 +126,6 @@ body {
     word-wrap: break-word;
 }
 
-/* ================= ANSWER ================= */
 .answer-section {
     background: #f8f9fa;
     border-radius: 15px;
@@ -170,7 +168,6 @@ body {
     word-wrap: break-word;
 }
 
-/* ================= CONTROLS ================= */
 .controls {
     display: flex;
     gap: 15px;
@@ -211,7 +208,6 @@ body {
 
 .hidden { display: none !important; }
 
-/* ================= MODAL POPUP ================= */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -290,7 +286,6 @@ body {
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-/* Tablet specific styles */
 @media (max-width: 1024px) and (min-width: 768px) {
     .question-container {
         padding: 25px;
@@ -367,12 +362,10 @@ body {
 
 <body>
 
-<!-- TIMER -->
 <div class="timer-container">
     <div class="timer-bar"></div>
 </div>
 
-<!-- MAIN CONTENT -->
 <div class="question-container">
     <h1 class="stage-title">🏆 Round 1: Team Battle</h1>
     <p class="stage-subtitle">Most correct answers wins!</p>
@@ -380,7 +373,7 @@ body {
     <div class="question-number" id="questionNumber"></div>
 
     <div class="question-box">
-        <div class="original-sentence" id="originalSentence"></div>
+        <div class="original-sentence" id="originalSentence">Loading questions...</div>
         <div class="change-instruction" id="changeInstruction"></div>
     </div>
 
@@ -396,7 +389,6 @@ body {
     </div>
 </div>
 
-<!-- TIME'S UP MODAL -->
 <div class="modal-overlay" id="timesUpModal">
     <div class="modal-content">
         <div class="modal-icon">⏰</div>
@@ -423,23 +415,32 @@ $(document).ready(function () {
     
     console.log('Loading CSV file:', selectedCsvFile);
     
-    fetch(selectedCsvFile)
+    // Add cache busting to prevent caching issues
+    const url = selectedCsvFile + '?t=' + new Date().getTime();
+    
+    fetch(url)
         .then(res => {
             if (!res.ok) {
-                throw new Error(`Could not load ${selectedCsvFile}`);
+                throw new Error(`Could not load ${selectedCsvFile} (Status: ${res.status})`);
             }
             return res.text();
         })
         .then(csv => {
-            console.log('CSV loaded, length:', csv.length);
+            console.log('CSV loaded, first 200 chars:', csv.substring(0, 200));
             parseCSV(csv);
             
             if (questions.length === 0) {
-                alert('No valid questions found in the CSV file. Please check the file format.');
+                alert('No valid questions found in the CSV file. Please check the file format.\n\nFirst few lines of CSV:\n' + csv.substring(0, 300));
                 return;
             }
             
-            console.log('Questions loaded:', questions.length);
+            console.log('Questions loaded successfully:', questions.length);
+            
+            // Display first question as a test
+            if (questions.length > 0) {
+                console.log('First question:', questions[0]);
+            }
+            
             showQuestion();
             
             // Set timer for 10 minutes (600000 ms)
@@ -447,7 +448,6 @@ $(document).ready(function () {
                 showTimesUpModal();
             }, 600000);
             
-            // Listen for animation end on timer bar
             $('.timer-bar').on('animationend', function() {
                 showTimesUpModal();
             });
@@ -461,47 +461,71 @@ $(document).ready(function () {
 function parseCSV(csv) {
     const lines = csv.split('\n');
     questions = [];
-
-    // Check if the file uses tabs or commas
-    const firstLine = lines[1] || '';
-    const delimiter = firstLine.includes('\t') ? '\t' : ',';
     
-    console.log('Using delimiter:', delimiter);
+    console.log('Total lines in CSV:', lines.length);
 
+    // Skip header row (i=1 instead of i=0 to skip the header)
     for (let i = 1; i < lines.length; i++) {
-        if (lines[i].trim() === '') continue; // Skip empty lines
+        const line = lines[i].trim();
+        if (line === '') {
+            console.log(`Line ${i} is empty, skipping`);
+            continue;
+        }
         
-        let parts;
-        if (delimiter === '\t') {
-            parts = lines[i].split('\t');
+        console.log(`Processing line ${i}:`, line.substring(0, 50));
+        
+        // Try to parse with different delimiters
+        let parts = [];
+        
+        // First try comma
+        parts = line.split(',');
+        
+        // If we don't get at least 4 parts, try tab
+        if (parts.length < 4) {
+            parts = line.split('\t');
+            console.log(`Line ${i} using tab delimiter, parts:`, parts.length);
         } else {
-            parts = lines[i].split(',');
+            console.log(`Line ${i} using comma delimiter, parts:`, parts.length);
         }
         
         if (parts.length >= 4) {
-            questions.push({
-                original: parts[1]?.trim() || '',
-                changeTo: parts[2]?.trim() || '',
-                answer: parts[3]?.trim() || ''
-            });
+            const question = {
+                original: parts[1] ? parts[1].trim() : '',
+                changeTo: parts[2] ? parts[2].trim() : '',
+                answer: parts[3] ? parts[3].trim() : ''
+            };
+            
+            // Only add if all fields have content
+            if (question.original && question.changeTo && question.answer) {
+                questions.push(question);
+                console.log(`Added question ${questions.length}:`, question.original.substring(0, 30));
+            } else {
+                console.log('Skipping line - missing fields:', question);
+            }
+        } else {
+            console.log(`Line ${i} has insufficient parts:`, parts.length);
         }
     }
 
-    // Filter out any empty questions
-    questions = questions.filter(q => q.original && q.changeTo && q.answer);
+    console.log('Total questions parsed:', questions.length);
     
     // RANDOMIZE QUESTIONS
-    questions.sort(() => Math.random() - 0.5);
+    if (questions.length > 0) {
+        questions.sort(() => Math.random() - 0.5);
+        console.log('Questions randomized');
+    }
 }
 
 function showQuestion() {
     if (currentIndex >= questions.length) {
+        console.log('End of questions, going to winner');
         clearTimeout(timerTimeout);
         location.href = 'winner.html';
         return;
     }
 
     const q = questions[currentIndex];
+    console.log(`Showing question ${currentIndex + 1}:`, q);
 
     $('#questionNumber').text(`Question ${currentIndex + 1} of ${questions.length}`);
     $('#originalSentence').text(q.original);
@@ -512,24 +536,17 @@ function showQuestion() {
     $('#showAnswerBtn').removeClass('hidden');
     $('#nextBtn').addClass('hidden');
     
-    // Scroll to top of question container
     $('.question-container').scrollTop(0);
 }
 
 function showTimesUpModal() {
-    // Clear the timeout to prevent multiple triggers
     clearTimeout(timerTimeout);
-    
-    // Show the modal
     $('#timesUpModal').fadeIn(300).css('display', 'flex');
-    
-    // Pause the timer animation
     $('.timer-bar').css('animation-play-state', 'paused');
 }
 
 $('#showAnswerBtn').on('click', function () {
     $('#answerSection').slideDown(300, function() {
-        // After answer is shown, scroll to make sure buttons are visible
         $('.question-container').animate({
             scrollTop: $('.question-container')[0].scrollHeight
         }, 500);
@@ -543,13 +560,10 @@ $('#nextBtn').on('click', function () {
     showQuestion();
 });
 
-// Modal OK button click
 $('#modalOkBtn').on('click', function() {
-    // Redirect to winner page
     location.href = 'winner.html';
 });
 
-// Clear timeout when leaving page
 window.addEventListener('beforeunload', function() {
     clearTimeout(timerTimeout);
 });
