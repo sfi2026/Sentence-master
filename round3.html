@@ -448,7 +448,7 @@ function parseCSV(csv) {
 function showQuestion() {
     if (currentIndex >= questions.length) {
         clearTimeout(timerTimeout);
-        location.href = 'index.html';
+        location.href = 'winner.html';  // Changed to winner.html
         return;
     }
 
@@ -490,15 +490,15 @@ $('#nextBtn').on('click', function () {
 });
 
 $('#endBtn').on('click', function () {
-    if (confirm('End the game and return to menu?')) {
+    if (confirm('End the game and go to winners?')) {
         clearTimeout(timerTimeout);
-        location.href = 'index.html';
+        location.href = 'winner.html';  // Now goes to winner.html
     }
 });
 
 // Modal OK button click
 $('#modalOkBtn').on('click', function() {
-    location.href = 'index.html';
+    location.href = 'winner.html';  // Changed to winner.html
 });
 
 // Clear timeout when leaving page
