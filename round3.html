@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Round 3: Elimination Battle</title>
+    <title>Round 2: 1 vs. 1 Ultimate Battle</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,34 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 20px 20px 20px 0;
+            overflow: auto;
+        }
+
+        /* ===== TIMER (TOP TO BOTTOM) ===== */
+        .timer-container {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 18px;
+            height: 100vh;
+            background: rgba(0,0,0,0.15);
+            z-index: 100;
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 0%;
+            background: #00FF00;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: countdown 600s linear forwards;
+        }
+
+        @keyframes countdown {
+            from { height: 0%; }
+            to { height: 100%; }
         }
 
         .question-container {
@@ -32,6 +59,24 @@
             width: 100%;
             box-shadow: 0 10px 30px rgba(0,0,0,0.25);
             text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .question-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .question-container::-webkit-scrollbar-thumb {
+            background: #FF6B6B;
+            border-radius: 10px;
         }
 
         .stage-title {
@@ -39,12 +84,14 @@
             font-size: 42px;
             color: #FF6B6B;
             margin-bottom: 10px;
+            flex-shrink: 0;
         }
 
         .stage-subtitle {
             font-size: 20px;
             color: #666;
             margin-bottom: 30px;
+            flex-shrink: 0;
         }
 
         .question-number {
@@ -52,6 +99,7 @@
             font-size: 26px;
             color: #667eea;
             margin-bottom: 20px;
+            flex-shrink: 0;
         }
 
         .question-box {
@@ -60,17 +108,21 @@
             padding: 30px;
             color: white;
             margin-bottom: 25px;
+            flex-shrink: 0;
         }
 
         .original-sentence {
-            font-size: 24px;
+            font-size: 26px;
             margin-bottom: 15px;
+            word-wrap: break-word;
+            line-height: 1.4;
         }
 
         .change-instruction {
             font-family: 'Fredoka One', cursive;
-            font-size: 20px;
+            font-size: 22px;
             color: #FFD700;
+            word-wrap: break-word;
         }
 
         .answer-section {
@@ -79,22 +131,40 @@
             padding: 25px;
             margin-bottom: 25px;
             display: none;
+            max-height: 300px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .answer-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .answer-section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .answer-section::-webkit-scrollbar-thumb {
+            background: #FF6B6B;
+            border-radius: 10px;
         }
 
         .answer-label {
             font-family: 'Fredoka One', cursive;
-            font-size: 20px;
+            font-size: 22px;
             color: #FF6B6B;
             margin-bottom: 10px;
         }
 
         .answer-text {
-            font-size: 22px;
+            font-size: 24px;
             color: #2c3e50;
             padding: 15px;
             background: white;
             border-radius: 10px;
             border: 3px solid #FF6B6B;
+            word-wrap: break-word;
         }
 
         .controls {
@@ -102,12 +172,20 @@
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
+            margin-top: 10px;
+            padding: 15px 0 5px 0;
+            background: white;
+            border-top: 2px solid #f0f0f0;
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
         }
 
         .control-btn {
             font-family: 'Fredoka One', cursive;
-            font-size: 18px;
-            padding: 14px 32px;
+            font-size: 20px;
+            padding: 15px 35px;
             border: none;
             border-radius: 15px;
             cursor: pointer;
@@ -115,9 +193,13 @@
             text-transform: uppercase;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: 0.3s;
+            min-width: 160px;
         }
 
-        .control-btn:hover { transform: translateY(-3px); }
+        .control-btn:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
 
         .btn-show { background: linear-gradient(145deg, #4ECDC4, #44A08D); }
         .btn-next { background: linear-gradient(145deg, #FFD700, #FFA500); }
@@ -126,38 +208,109 @@
 
         .hidden { display: none !important; }
 
-        /* TIMER — FLUSH RIGHT EDGE */
-        .timer-wrapper {
+        /* ===== MODAL POPUP ===== */
+        .modal-overlay {
+            display: none;
             position: fixed;
             top: 0;
-            right: 0;
-            width: 20px;
-            height: 100vh;
-            background: rgba(0,0,0,0.15);
-        }
-
-        .timer-bar {
-            position: absolute;
-            bottom: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: #00FF00;
-            transition: height 1s linear;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: modalPop 0.5s ease-out;
+        }
+
+        @keyframes modalPop {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .modal-content h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 48px;
+            color: #FF6B6B;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .modal-btn {
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            padding: 15px 50px;
+            background: linear-gradient(145deg, #FF6B6B, #EE5A6F);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
         @media (max-width: 768px) {
-            .controls { flex-direction: column; }
-            .control-btn { width: 100%; }
+            .controls { 
+                flex-direction: column;
+                position: static;
+            }
+            .control-btn { 
+                width: 100%;
+                min-width: auto;
+            }
         }
     </style>
 </head>
 <body>
 
+<!-- TIMER -->
+<div class="timer-container">
+    <div class="timer-bar"></div>
+</div>
+
 <div class="question-container">
-    <div class="stage-title">⚔️ Stage 3: Elimination Battle</div>
+    <div class="stage-title">⚔️ 1 vs. 1 Ultimate Battle</div>
     <div class="stage-subtitle">Last One Standing Wins</div>
 
-    <div class="question-number" id="questionNumber"></div>
+    <div class="question-number" id="questionNumber">Loading questions...</div>
 
     <div class="question-box">
         <div class="original-sentence" id="originalSentence"></div>
@@ -172,106 +325,186 @@
     <div class="controls">
         <button type="button" class="control-btn btn-show" id="showAnswerBtn">Show Answer</button>
         <button type="button" class="control-btn btn-next hidden" id="nextBtn">Next</button>
-        <button type="button" class="control-btn btn-end hidden" id="endBtn">End Game</button>
+        <button type="button" class="control-btn btn-end" id="endBtn">End Game</button>
         <button type="button" class="control-btn btn-home" onclick="location.href='index.html'">Home</button>
     </div>
 </div>
 
-<div class="timer-wrapper">
-    <div class="timer-bar" id="timerBar"></div>
+<!-- TIME'S UP MODAL -->
+<div class="modal-overlay" id="timesUpModal">
+    <div class="modal-content">
+        <div class="modal-icon">⏰</div>
+        <h2>TIME'S UP!</h2>
+        <p>The round has ended</p>
+        <button class="modal-btn" id="modalOkBtn">OK</button>
+    </div>
 </div>
 
 <script>
-    let questions = [];
-    let currentIndex = 0;
-    const ROUND_TIME = 15;
-    let timeLeft = ROUND_TIME;
-    let timer = null;
+let questions = [];
+let currentIndex = 0;
+let timerTimeout;
 
-    $(document).ready(function () {
-        fetch('./questions.csv')
-            .then(res => res.text())
-            .then(csv => {
-                parseCSV(csv);
-                showQuestion();
+$(document).ready(function () {
+    // Get the selected CSV file from localStorage
+    const selectedCsvFile = localStorage.getItem('sentenceMasterCSV');
+    
+    if (!selectedCsvFile) {
+        alert('No CSV file selected. Please go back and choose a level.');
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    console.log('Loading CSV file:', selectedCsvFile);
+    
+    // Add cache busting
+    const url = selectedCsvFile + '?t=' + new Date().getTime();
+    
+    fetch(url)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`Could not load ${selectedCsvFile} (Status: ${res.status})`);
+            }
+            return res.text();
+        })
+        .then(csv => {
+            console.log('CSV loaded, length:', csv.length);
+            console.log('First 200 chars:', csv.substring(0, 200));
+            
+            parseCSV(csv);
+            
+            if (questions.length === 0) {
+                alert('No valid questions found in the CSV file. Please check the file format.');
+                return;
+            }
+            
+            console.log('Questions loaded successfully:', questions.length);
+            showQuestion();
+            
+            // Set timer for 10 minutes (600000 ms)
+            timerTimeout = setTimeout(function() {
+                showTimesUpModal();
+            }, 600000);
+            
+            // Listen for animation end on timer bar
+            $('.timer-bar').on('animationend', function() {
+                showTimesUpModal();
             });
-    });
+        })
+        .catch(error => {
+            alert('Error loading CSV: ' + error.message);
+            console.error('Fetch error:', error);
+        });
+});
 
-    function parseCSV(csv) {
-        const lines = csv.split('\n');
-        for (let i = 1; i < lines.length; i++) {
-            const p = lines[i].split(',');
-            if (p.length >= 4) {
-                questions.push({
-                    original: p[1].trim(),
-                    changeTo: p[2].trim(),
-                    answer: p[3].trim()
-                });
+function parseCSV(csv) {
+    const lines = csv.split('\n');
+    questions = [];
+    
+    console.log('Total lines in CSV:', lines.length);
+    
+    // Check the header to understand column structure
+    const headerLine = lines[0];
+    console.log('Header:', headerLine);
+    
+    // Determine delimiter
+    const delimiter = headerLine.includes('\t') ? '\t' : ',';
+    console.log('Using delimiter:', delimiter);
+    
+    // Start from line 1 (skip header)
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line === '') continue;
+        
+        let parts;
+        if (delimiter === '\t') {
+            parts = line.split('\t');
+        } else {
+            parts = line.split(',');
+        }
+        
+        if (parts.length >= 4) {
+            const question = {
+                original: parts[1] ? parts[1].trim() : '',
+                changeTo: parts[2] ? parts[2].trim() : '',
+                answer: parts[3] ? parts[3].trim() : ''
+            };
+            
+            // Only add if all fields have content
+            if (question.original && question.changeTo && question.answer) {
+                questions.push(question);
             }
         }
+    }
+    
+    console.log('Total questions parsed:', questions.length);
+    
+    // Shuffle questions
+    if (questions.length > 0) {
         questions.sort(() => Math.random() - 0.5);
     }
+}
 
-    function showQuestion() {
-        if (currentIndex >= questions.length) {
-            showWinner();
-            return;
-        }
-
-        const q = questions[currentIndex];
-
-        $('#questionNumber').text(`Question ${currentIndex + 1}`);
-        $('#originalSentence').text(q.original);
-        $('#changeInstruction').text(`Change to: ${q.changeTo}`);
-        $('#answerText').text(q.answer);
-
-        $('#answerSection').hide();
-        $('#showAnswerBtn').removeClass('hidden');
-        $('#nextBtn, #endBtn').addClass('hidden');
-
-        startTimer();
+function showQuestion() {
+    if (currentIndex >= questions.length) {
+        clearTimeout(timerTimeout);
+        location.href = 'index.html';
+        return;
     }
 
-    function startTimer() {
-        clearInterval(timer);
-        timeLeft = ROUND_TIME;
-        updateTimerBar();
+    const q = questions[currentIndex];
+    console.log(`Showing question ${currentIndex + 1}:`, q);
 
-        timer = setInterval(() => {
-            timeLeft--;
-            updateTimerBar();
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-            }
-        }, 1000);
-    }
+    $('#questionNumber').text(`Question ${currentIndex + 1} of ${questions.length}`);
+    $('#originalSentence').text(q.original);
+    $('#changeInstruction').text(`→ Change to: ${q.changeTo}`);
+    $('#answerText').text(q.answer);
 
-    function updateTimerBar() {
-        $('#timerBar').css('height', (timeLeft / ROUND_TIME * 100) + '%');
-    }
+    $('#answerSection').hide();
+    $('#showAnswerBtn').removeClass('hidden');
+    $('#nextBtn, #endBtn').addClass('hidden');
+    
+    $('.question-container').scrollTop(0);
+}
 
-    $('#showAnswerBtn').on('click', function () {
-        clearInterval(timer);
-        $('#answerSection').slideDown(300);
-        $(this).addClass('hidden');
-        $('#nextBtn, #endBtn').removeClass('hidden');
+function showTimesUpModal() {
+    clearTimeout(timerTimeout);
+    $('#timesUpModal').fadeIn(300).css('display', 'flex');
+    $('.timer-bar').css('animation-play-state', 'paused');
+}
+
+$('#showAnswerBtn').on('click', function () {
+    clearTimeout(timerTimeout); // Stop the timer when answer is shown
+    $('#answerSection').slideDown(300, function() {
+        $('.question-container').animate({
+            scrollTop: $('.question-container')[0].scrollHeight
+        }, 500);
     });
+    $(this).addClass('hidden');
+    $('#nextBtn, #endBtn').removeClass('hidden');
+});
 
-    $('#nextBtn').on('click', function () {
-        currentIndex++;
-        showQuestion();
-    });
+$('#nextBtn').on('click', function () {
+    currentIndex++;
+    showQuestion();
+});
 
-    $('#endBtn').on('click', function () {
-        clearInterval(timer);
-        if (confirm('Crown the winner?')) {
-            showWinner();
-        }
-    });
-
-    function showWinner() {
-        location.href = 'winner.html';
+$('#endBtn').on('click', function () {
+    if (confirm('End the game and return to menu?')) {
+        clearTimeout(timerTimeout);
+        location.href = 'index.html';
     }
+});
+
+// Modal OK button click
+$('#modalOkBtn').on('click', function() {
+    location.href = 'index.html';
+});
+
+// Clear timeout when leaving page
+window.addEventListener('beforeunload', function() {
+    clearTimeout(timerTimeout);
+});
 </script>
 
 </body>
