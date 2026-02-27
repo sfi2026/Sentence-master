@@ -490,7 +490,7 @@ $('#nextBtn').on('click', function () {
 });
 
 $('#endBtn').on('click', function () {
-    if (confirm('End the game and go to winners?')) {
+    if (confirm('End the game and announce the winner?')) {
         clearTimeout(timerTimeout);
         location.href = 'winner.html';  // Now goes to winner.html
     }
@@ -500,6 +500,12 @@ $('#endBtn').on('click', function () {
 $('#modalOkBtn').on('click', function() {
     location.href = 'winner.html';  // Changed to winner.html
 });
+
+if (currentIndex >= questions.length) {
+    clearTimeout(timerTimeout);
+    location.href = 'winner.html';  // Changed from index.html
+    return;
+}
 
 // Clear timeout when leaving page
 window.addEventListener('beforeunload', function() {
