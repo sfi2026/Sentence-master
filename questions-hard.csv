@@ -19,83 +19,63 @@ Question #,Original Sentence (EN),Change To,Answer
 18,He can manage the project.,question,Can he manage the project?
 19,We have completed the exercise.,question,Have we completed the exercise?
 20,You are tired now.,change to yesterday,You were tired yesterday.
-1,She has organized the files.,negative,She has not organized the files.
-2,They collect old magazines.,past,They collected old magazines.
-3,He is calm now.,change to yesterday,He was calm yesterday.
-4,We have ordered the food.,question,Have we ordered the food?
-5,I practice the piano every day.,present perfect,I have practiced the piano every day.
-6,She will invite her friend tomorrow.,negative,She will not invite her friend tomorrow.
-7,They have repaired the computer.,question,Have they repaired the computer?
-8,He drives carefully.,negative,He does not drive carefully.
-9,We meet today.,change to tomorrow,We will meet tomorrow.
-10,I have sent the email.,negative,I have not sent the email.
-11,She prepares dinner every evening.,question,Does she prepare dinner every evening?
-12,They have improved their grades.,negative,They have not improved their grades.
-13,He can fix the printer.,question,Can he fix the printer?
-14,We are ready now.,change to yesterday,We were ready yesterday.
-15,I finish my homework at night.,past,I finished my homework last night.
-16,She has chosen a new topic.,question,Has she chosen a new topic?
-17,They paint the classroom every year.,passive,The classroom is painted every year.
-18,He completed the task yesterday.,passive,The task was completed yesterday.
-19,We have started the project.,question,Have we started the project?
-20,You should follow the instructions.,negative,You should not follow the instructions.
-1,She has submitted the application.,negative,She has not submitted the application.
-2,They deliver packages every day.,passive,Packages are delivered every day.
-3,He was tired because he finished the race.,use past perfect,He was tired because he had finished the race.
-4,We will arrange the meeting tomorrow.,negative,We will not arrange the meeting tomorrow.
-5,I have updated the document.,question,Have I updated the document?
-6,"She said, “I need more time.”",reported speech,She said that she needed more time.
-7,They build houses in this area.,passive,Houses are built in this area.
-8,He checks his messages every morning.,negative,He does not check his messages every morning.
-9,We had packed the bags before the taxi arrived.,question,Had we packed the bags before the taxi arrived?
-10,I booked the tickets yesterday.,present perfect,I have booked the tickets.
-11,She improves her performance every month.,present perfect,She has improved her performance every month.
-12,"They said, “We are ready.”",reported speech,They said that they were ready.
-13,He can handle the situation.,question,Can he handle the situation?
-14,We have solved the problem.,negative,We have not solved the problem.
-15,I was nervous because I lost my keys.,use past perfect,I was nervous because I had lost my keys.
-16,She organizes events every year.,past,She organized events last year.
-17,They have reduced the price.,question,Have they reduced the price?
-18,He sent the invitation.,passive,The invitation was sent.
-19,We are preparing the report now.,change to yesterday,We were preparing the report yesterday.
-20,You should follow the instructions.,negative,You should not follow the instructions.
-1,She has prepared the presentation.,negative,She has not prepared the presentation.
-2,They have finished the project.,question,Have they finished the project?
-3,The company announces the results every year.,passive,The results are announced every year.
-4,The teacher corrected the tests.,passive,The tests were corrected.
-5,He has discovered a mistake.,question,Has he discovered a mistake?
-6,We clean the classroom every day.,passive,The classroom is cleaned every day.
-7,She has invited her friends.,negative,She has not invited her friends.
-8,They published the article yesterday.,passive,The article was published yesterday.
-9,He has fixed the printer.,question,Has he fixed the printer?
-10,The manager cancels meetings sometimes.,passive,Meetings are canceled sometimes.
-11,We have chosen a new leader.,question,Have we chosen a new leader?
-12,The workers deliver packages daily.,passive,Packages are delivered daily.
-13,She has completed the task.,negative,She has not completed the task.
-14,They designed the logo last week.,passive,The logo was designed last week.
-15,He has sent the email.,negative,He has not sent the email.
-16,The chef prepares the food.,passive,The food is prepared.
-17,We have improved our service.,question,Have we improved our service?
-18,The staff organized the event.,passive,The event was organized.
-19,She has updated the website.,question,Has she updated the website?
-20,They have reduced the price.,negative,They have not reduced the price.
-81,She manages her time well.,negative,She does not manage her time well.
-82,They are worried about the exam.,question,Are they worried about the exam?
-83,He solves the problem quickly.,past,He solved the problem quickly.
-84,We meet today.,change to tomorrow,We will meet tomorrow.
-85,I believe his explanation.,negative,I do not believe his explanation.
-86,She was absent yesterday.,change to now,She is absent now.
-87,They deliver the package on time.,past,They delivered the package on time.
-88,He is responsible for the team.,negative,He is not responsible for the team.
-89,We choose the best option.,past,We chose the best option.
-90,You understand the message.,question,Do you understand the message?
-91,She keeps her promise.,negative,She does not keep her promise.
-92,They are excited now.,change to yesterday,They were excited yesterday.
-93,He improves his English every day.,past,He improved his English every day.
-94,We arrive early for class.,question,Do we arrive early for class?
-95,I will finish the report tomorrow.,change to yesterday,I finished the report yesterday.
-96,She depends on her friends.,question,Does she depend on her friends?
-97,They prepare for the presentation.,negative,They do not prepare for the presentation.
-98,He feels confident now.,change to yesterday,He felt confident yesterday.
-99,We are satisfied with the result.,question,Are we satisfied with the result?
-100,You check the details carefully.,past,You checked the details carefully.
+21,She has organized the files.,negative,She has not organized the files.
+22,They collect old magazines.,past,They collected old magazines.
+23,He is calm now.,change to yesterday,He was calm yesterday.
+24,We have ordered the food.,question,Have we ordered the food?
+25,I practice the piano every day.,present perfect,I have practiced the piano every day.
+26,She will invite her friend tomorrow.,negative,She will not invite her friend tomorrow.
+27,They have repaired the computer.,question,Have they repaired the computer?
+28,He drives carefully.,negative,He does not drive carefully.
+29,We meet today.,change to tomorrow,We will meet tomorrow.
+30,I have sent the email.,negative,I have not sent the email.
+31,She prepares dinner every evening.,question,Does she prepare dinner every evening?
+32,They have improved their grades.,negative,They have not improved their grades.
+33,He can fix the printer.,question,Can he fix the printer?
+34,We are ready now.,change to yesterday,We were ready yesterday.
+35,I finish my homework at night.,past,I finished my homework last night.
+36,She has chosen a new topic.,question,Has she chosen a new topic?
+37,They paint the classroom every year.,passive,The classroom is painted every year.
+38,He completed the task yesterday.,passive,The task was completed yesterday.
+39,We have started the project.,question,Have we started the project?
+40,You should follow the instructions.,negative,You should not follow the instructions.
+41,She has submitted the application.,negative,She has not submitted the application.
+42,They deliver packages every day.,passive,Packages are delivered every day.
+43,He was tired because he finished the race.,use past perfect,He was tired because he had finished the race.
+44,We will arrange the meeting tomorrow.,negative,We will not arrange the meeting tomorrow.
+45,I have updated the document.,question,Have I updated the document?
+46,"She said, “I need more time.”",reported speech,She said that she needed more time.
+47,They build houses in this area.,passive,Houses are built in this area.
+48,He checks his messages every morning.,negative,He does not check his messages every morning.
+49,We had packed the bags before the taxi arrived.,question,Had we packed the bags before the taxi arrived?
+50,I booked the tickets yesterday.,present perfect,I have booked the tickets.
+51,She improves her performance every month.,present perfect,She has improved her performance every month.
+52,"They said, “We are ready.”",reported speech,They said that they were ready.
+53,He can handle the situation.,question,Can he handle the situation?
+54,We have solved the problem.,negative,We have not solved the problem.
+55,I was nervous because I lost my keys.,use past perfect,I was nervous because I had lost my keys.
+56,She organizes events every year.,past,She organized events last year.
+57,They have reduced the price.,question,Have they reduced the price?
+58,He sent the invitation.,passive,The invitation was sent.
+59,We are preparing the report now.,change to yesterday,We were preparing the report yesterday.
+60,You should follow the instructions.,negative,You should not follow the instructions.
+61,She has prepared the presentation.,negative,She has not prepared the presentation.
+62,They have finished the project.,question,Have they finished the project?
+63,The company announces the results every year.,passive,The results are announced every year.
+64,The teacher corrected the tests.,passive,The tests were corrected.
+65,He has discovered a mistake.,question,Has he discovered a mistake?
+66,We clean the classroom every day.,passive,The classroom is cleaned every day.
+67,She has invited her friends.,negative,She has not invited her friends.
+68,They published the article yesterday.,passive,The article was published yesterday.
+69,He has fixed the printer.,question,Has he fixed the printer?
+70,The manager cancels meetings sometimes.,passive,Meetings are canceled sometimes.
+71,We have chosen a new leader.,question,Have we chosen a new leader?
+72,The workers deliver packages daily.,passive,Packages are delivered daily.
+73,She has completed the task.,negative,She has not completed the task.
+74,They designed the logo last week.,passive,The logo was designed last week.
+75,He has sent the email.,negative,He has not sent the email.
+76,The chef prepares the food.,passive,The food is prepared.
+77,We have improved our service.,question,Have we improved our service?
+78,The staff organized the event.,passive,The event was organized.
+79,She has updated the website.,question,Has she updated the website?
+80,They have reduced the price.,negative,They have not reduced the price.
