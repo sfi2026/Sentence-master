@@ -379,6 +379,8 @@ $(document).ready(function () {
             }
             
             console.log('Questions loaded successfully:', questions.length);
+            console.log('First question:', questions[0]);
+            
             showQuestion();
             
             // Set timer for 10 minutes (600000 ms)
@@ -397,6 +399,7 @@ $(document).ready(function () {
         });
 });
 
+// Improved CSV parser that handles quotes and commas
 function parseCSV(csv) {
     const lines = csv.split('\n');
     questions = [];
@@ -416,23 +419,23 @@ function parseCSV(csv) {
         const line = lines[i].trim();
         if (line === '') continue;
         
-        let parts;
-        if (delimiter === '\t') {
-            parts = line.split('\t');
-        } else {
-            parts = line.split(',');
-        }
+        // Parse CSV line properly handling quotes
+        const parts = parseCSVLine(line, delimiter);
         
         if (parts.length >= 4) {
             const question = {
+                // Column 1 = Original Sentence (EN)
                 original: parts[1] ? parts[1].trim() : '',
+                // Column 2 = Change To
                 changeTo: parts[2] ? parts[2].trim() : '',
+                // Column 3 = Answer
                 answer: parts[3] ? parts[3].trim() : ''
             };
             
             // Only add if all fields have content
             if (question.original && question.changeTo && question.answer) {
                 questions.push(question);
+                console.log(`Added question ${questions.length}:`, question.original.substring(0, 30));
             }
         }
     }
@@ -445,10 +448,33 @@ function parseCSV(csv) {
     }
 }
 
+// Helper function to properly parse CSV lines with quotes
+function parseCSVLine(line, delimiter) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === delimiter && !inQuotes) {
+            result.push(current);
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    
+    result.push(current); // Add the last field
+    return result;
+}
+
 function showQuestion() {
     if (currentIndex >= questions.length) {
         clearTimeout(timerTimeout);
-        location.href = 'winner.html';  // Changed to winner.html
+        location.href = 'winner.html';
         return;
     }
 
@@ -474,7 +500,7 @@ function showTimesUpModal() {
 }
 
 $('#showAnswerBtn').on('click', function () {
-    clearTimeout(timerTimeout); // Stop the timer when answer is shown
+    clearTimeout(timerTimeout);
     $('#answerSection').slideDown(300, function() {
         $('.question-container').animate({
             scrollTop: $('.question-container')[0].scrollHeight
@@ -492,20 +518,14 @@ $('#nextBtn').on('click', function () {
 $('#endBtn').on('click', function () {
     if (confirm('End the game and announce the winner?')) {
         clearTimeout(timerTimeout);
-        location.href = 'winner.html';  // Now goes to winner.html
+        location.href = 'winner.html';
     }
 });
 
 // Modal OK button click
 $('#modalOkBtn').on('click', function() {
-    location.href = 'winner.html';  // Changed to winner.html
+    location.href = 'winner.html';
 });
-
-if (currentIndex >= questions.length) {
-    clearTimeout(timerTimeout);
-    location.href = 'winner.html';  // Changed from index.html
-    return;
-}
 
 // Clear timeout when leaving page
 window.addEventListener('beforeunload', function() {
