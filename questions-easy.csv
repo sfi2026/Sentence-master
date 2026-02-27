@@ -1,101 +1,81 @@
 Question #,Original Sentence (EN),Change To,Answer 
 1,I am ready.,negative,I am not ready.
-2,She is happy.,negative,She is not happy.
+2,She is my cousin.,negative,She is not my cousin.
 3,They are at school.,negative,They are not at school.
-4,He is my friend.,negative,He is not my friend.
-5,We are early.,negative,We are not early.
-6,I like apples.,past,I liked apples.
-7,She plays the piano.,past,She played the piano.
-8,They eat lunch.,past,They ate lunch.
-9,He reads books.,past,He read books.
-10,We play games.,past,We played games.
-11,I am tired.,question,Am I tired?
-12,She is your teacher.,question,Is she your teacher?
-13,You are busy.,question,Are you busy?
-14,He likes milk.,question,Does he like milk?
-15,We play soccer.,question,Do we play soccer?
-16,I study English.,future,I will study English.
-17,She goes home.,future,She will go home.
-18,We eat dinner.,future,We will eat dinner.
-19,They play outside.,future,They will play outside.
-20,He writes stories.,future,He will write stories.
-21,I am happy.,negative,I am not happy.
-22,She is my sister.,question,Is she my sister?
-23,They are at home.,negative,They are not at home.
-24,He is a student.,question,Is he a student?
-25,We are ready.,negative,We are not ready.
-26,I like milk.,negative,I do not like milk.
-27,She likes cats.,past,She liked cats.
-28,They soccer.,past,They played soccer.
-29,He eats rice.,past,He ate rice.
-30,We go to school.,past,We went to school.
-31,I am tired now.,change to yesterday,I was tired yesterday.
-32,She is busy today.,change to yesterday,She was busy yesterday.
-33,They are here now.,change to yesterday,They were here yesterday.
-34,He likes apples.,question,Does he like apples?
-35,We play games.,question,Do we play games?
-36,I have a bag.,negative,I do not have a bag.
-37,She has a dog.,negative,She does not have a dog.
-38,They go home now.,change to yesterday,They went home yesterday.
-39,He eats lunch now.,change to yesterday,He ate lunch yesterday.
-40,We are friends.,question,Are we friends?
+4,He wants water.,negative,He does not want water.
+5,We have a dog.,negative,We do not have a dog.
+6,You are busy.,question,Are you busy?
+7,She is in the kitchen.,question,Is she in the kitchen?
+8,They like pizza.,question,Do they like pizza?
+9,He plays the piano.,question,Does he play the piano?
+10,We see the teacher.,question,Do we see the teacher?
+11,I like milk.,past,I liked milk.
+12,She plays outside.,past,She played outside.
+13,They eat rice.,past,They ate rice.
+14,He goes home.,past,He went home.
+15,We see a movie.,past,We saw a movie.
+16,I am tired now.,change to yesterday,I was tired yesterday.
+17,She is happy now.,change to yesterday,She was happy yesterday.
+18,They are here now.,change to yesterday,They were here yesterday.
+19,He eats lunch now.,change to yesterday,He ate lunch yesterday.
+20,We go to school now.,change to yesterday,We went to school yesterday.
+21,I am early.,negative,I am not early.
+22,She is my neighbor.,negative,She is not my neighbor.
+23,They are inside.,negative,They are not inside.
+24,He runs fast.,negative,He does not run fast.
+25,We drink milk.,negative,We do not drink milk.
+26,You are ready.,question,Are you ready?
+27,She is in the car.,question,Is she in the car?
+28,They jump high.,question,Do they jump high?
+29,He reads books.,question,Does he read books?
+30,We open the door.,question,Do we open the door?
+31,I sleep early.,past,I slept early.
+32,She runs in the park.,past,She ran in the park.
+33,They drink water.,past,They drank water.
+34,He sits on the chair.,past,He sat on the chair.
+35,We stand outside.,past,We stood outside.
+36,I am tired now.,change to yesterday,I was tired yesterday.
+37,She is happy now.,change to yesterday,She was happy yesterday.
+38,They are here now.,change to yesterday,They were here yesterday.
+39,He opens the window now.,change to yesterday,He opened the window yesterday.
+40,We run to school now.,change to yesterday,We ran to school yesterday.
 41,I am hungry.,negative,I am not hungry.
-42,She is at school.,negative,She is not at school.
-43,They are friends.,negative,They are not friends.
-44,He likes bread.,negative,He does not like bread.
-45,We have time.,negative,We do not have time.
-46,You are ready.,question,Are you ready?
-47,She is your teacher.,question,Is she your teacher?
-48,They like games.,question,Do they like games?
-49,He has a pencil.,question,Does he have a pencil?
-50,We play soccer.,question,Do we play soccer?
-51,I like apples.,past,I liked apples.
-52,She plays outside.,past,She played outside.
-53,They eat lunch.,past,They ate lunch.
-54,He goes home.,past,He went home.
-55,We have a test.,past,We had a test.
-56,I am happy now.,change to yesterday,I was happy yesterday.
-57,She is sick now.,change to yesterday,She was sick yesterday.
-58,They are here now.,change to yesterday,They were here yesterday.
-59,He eats dinner now.,change to yesterday,He ate dinner yesterday.
-60,We go to the park now.,change to yesterday,We went to the park yesterday.
+42,She is my aunt.,negative,She is not my aunt.
+43,They are outside.,negative,They are not outside.
+44,He cooks dinner.,negative,He does not cook dinner.
+45,We walk to school.,negative,We do not walk to school.
+46,You are tired.,question,Are you tired?
+47,She is in the garden.,question,Is she in the garden?
+48,They swim in the pool.,question,Do they swim in the pool?
+49,He sings well.,question,Does he sing well?
+50,We help our teacher.,question,Do we help our teacher?
+51,I visit my grandmother on Sundays.,past,I visited my grandmother last Sunday.
+52,She watches TV after dinner.,past,She watched TV after dinner.
+53,They play soccer every weekend.,past,They played soccer last weekend.
+54,He studies English at night.,past,He studied English last night.
+55,We clean our classroom every Friday.,past,We cleaned our classroom last Friday.
+56,I am eating lunch now.,negative,I am not eating lunch now.
+57,She is going to travel tomorrow.,question,Is she going to travel tomorrow?
+58,They have two brothers.,question,Do they have two brothers?
+59,He usually wakes up early.,negative,He does not usually wake up early.
+60,We are playing in the park.,past,We were playing in the park.
 61,I am cold.,negative,I am not cold.
-62,She is my friend.,negative,She is not my friend.
-63,They are happy now.,negative,They are not happy now.
-64,He likes bread.,negative,He does not like bread.
-65,We have a test.,negative,We do not have a test.
-66,You are tired.,question,Are you tired?
-67,She is your teacher.,question,Is she your teacher?
-68,They like milk.,question,Do they like milk?
-69,He has a pen.,question,Does he have a pen?
-70,We play outside.,question,Do we play outside?
-71,I like juice.,past,I liked juice.
-72,She plays games.,past,She played games.
-73,They eat dinner.,past,They ate dinner.
-74,He goes home.,past,He went home.
-75,We have lunch.,past,We had lunch.
-76,I am busy now.,change to yesterday,I was busy yesterday.
-77,She is sick now.,change to yesterday,She was sick yesterday.
-78,They are here now.,change to yesterday,They were here yesterday.
-79,He eats breakfast now.,change to yesterday,He ate breakfast yesterday.
-80,We go to the park now.,change to yesterday,We went to the park yesterday.
-81,I am tall.,negative,I am not tall.
-82,She is in the room.,negative,She is not in the room.
-83,They are late.,negative,They are not late.
-84,He likes cake.,negative,He does not like cake.
-85,We have a ball.,negative,We do not have a ball.
-86,You are busy.,question,Are you busy?
-87,She is at home.,question,Is she at home?
-88,They like apples.,question,Do they like apples?
-89,He has a bike.,question,Does he have a bike?
-90,We play soccer.,question,Do we play soccer?
-91,I like bread.,past,I liked bread.
-92,She plays outside.,past,She played outside.
-93,They eat rice.,past,They ate rice.
-94,He goes home.,past,He went home.
-95,We have class.,past,We had class.
-96,I am tired now.,change to yesterday,I was tired yesterday.
-97,She is happy now.,change to yesterday,She was happy yesterday.
-98,They are here now.,change to yesterday,They were here yesterday.
-99,He eats lunch now.,change to yesterday,He ate lunch yesterday.
-100,We go to school now.,change to yesterday,We went to school yesterday.
+62,She is my teacher.,negative,She is not my teacher.
+63,They are at home.,negative,They are not at home.
+64,He washes his hands.,negative,He does not wash his hands.
+65,We kick the ball.,negative,We do not kick the ball.
+66,I jump high.,negative,I do not jump high.
+67,She cooks rice.,negative,She does not cook rice.
+68,They cry loudly.,negative,They do not cry loudly.
+69,He laughs a lot.,negative,He does not laugh a lot.
+70,We open the door.,negative,We do not open the door.
+71,You are happy.,question,Are you happy?
+72,She is in the room.,question,Is she in the room?
+73,They close the window.,question,Do they close the window?
+74,He looks at the board.,question,Does he look at the board?
+75,We wait outside.,question,Do we wait outside?
+76,I jump.,past,I jumped.
+77,She cooks dinner.,past,She cooked dinner.
+78,They open the box.,past,They opened the box.
+79,He waits for me.,past,He waited for me.
+80,We laugh.,past,We laughed.
