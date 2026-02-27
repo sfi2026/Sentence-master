@@ -342,7 +342,7 @@ body {
     <div class="round-title">⚔️ Survivor Battle</div>
     <div class="stage-subtitle">Last one standing wins!</div>
     
-    <div class="question-number" id="questionNumber"></div>
+    <div class="question-number" id="questionNumber">Loading questions...</div>
 
     <div class="question-box">
         <div class="original-sentence" id="originalSentence"></div>
@@ -398,38 +398,62 @@ $(document).ready(function() {
         })
         .then(csv => {
             console.log('CSV loaded, length:', csv.length);
+            console.log('First 200 chars:', csv.substring(0, 200));
             
             const lines = csv.split('\n');
+            console.log('Total lines:', lines.length);
             
-            // Check if the file uses tabs or commas
-            const firstLine = lines[1] || '';
-            const delimiter = firstLine.includes('\t') ? '\t' : ',';
+            // Check the header to understand column structure
+            const headerLine = lines[0];
+            console.log('Header:', headerLine);
             
+            // Determine delimiter
+            const delimiter = headerLine.includes('\t') ? '\t' : ',';
             console.log('Using delimiter:', delimiter);
             
+            // Start from line 1 (skip header)
             for (let i = 1; i < lines.length; i++) {
-                if (lines[i].trim() === '') continue;
-                
-                let p;
-                if (delimiter === '\t') {
-                    p = lines[i].split('\t');
-                } else {
-                    p = lines[i].split(',');
+                const line = lines[i].trim();
+                if (line === '') {
+                    console.log(`Line ${i} is empty, skipping`);
+                    continue;
                 }
                 
-                if (p.length >= 4) {
-                    questions.push({
-                        original: p[1]?.trim() || '',
-                        changeTo: p[2]?.trim() || '',
-                        answer: p[3]?.trim() || ''
-                    });
+                let parts;
+                if (delimiter === '\t') {
+                    parts = line.split('\t');
+                } else {
+                    parts = line.split(',');
+                }
+                
+                console.log(`Line ${i} parts:`, parts.length);
+                
+                // Based on your CSV structure, columns are:
+                // parts[0] = Question #
+                // parts[1] = Original Sentence (EN)
+                // parts[2] = Change To
+                // parts[3] = Answer
+                
+                if (parts.length >= 4) {
+                    const question = {
+                        original: parts[1] ? parts[1].trim() : '',
+                        changeTo: parts[2] ? parts[2].trim() : '',
+                        answer: parts[3] ? parts[3].trim() : ''
+                    };
+                    
+                    // Only add if all fields have content
+                    if (question.original && question.changeTo && question.answer) {
+                        questions.push(question);
+                        console.log(`Added question ${questions.length}:`, question.original.substring(0, 30));
+                    } else {
+                        console.log('Skipping line - missing fields:', question);
+                    }
+                } else {
+                    console.log(`Line ${i} has insufficient parts:`, parts.length);
                 }
             }
             
-            // Filter out any empty questions
-            questions = questions.filter(q => q.original && q.changeTo && q.answer);
-            
-            console.log('Questions loaded:', questions.length);
+            console.log('Total questions loaded:', questions.length);
             
             if (questions.length === 0) {
                 alert('No valid questions found in the CSV file. Please check the file format.');
@@ -459,13 +483,14 @@ $(document).ready(function() {
 
 function showQuestion() {
     if (index >= questions.length) {
-        // End of questions - go to winner page
+        // End of questions - go to index page
         clearTimeout(timerTimeout);
-        location.href = 'winner.html';
+        location.href = 'index.html';
         return;
     }
 
     const q = questions[index];
+    console.log(`Showing question ${index + 1}:`, q);
     
     $('#questionNumber').text(`Question ${index + 1} of ${questions.length}`);
     $('#originalSentence').text(q.original);
@@ -503,8 +528,8 @@ $('#endBtn').on('click', function() {
     // Show confirmation dialog
     if (confirm('Are you sure you want to end the game?')) {
         clearTimeout(timerTimeout);
-        // Go directly to winner page
-        location.href = 'winner.html';
+        // Go directly to index page
+        location.href = 'index.html';
     }
 });
 
@@ -521,8 +546,8 @@ function showTimesUpModal() {
 
 // Modal OK button click
 $('#modalOkBtn').on('click', function() {
-    // Go to winner page
-    location.href = 'winner.html';
+    // Go to index page
+    location.href = 'index.html';
 });
 
 // Clear timeout when leaving page
